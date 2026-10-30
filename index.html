@@ -4,11 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CRM & Pipeline Industrial Pro</title>
-  <!-- Tailwind CSS CDN com suporte a Dark Mode via classe -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js para gráficos -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
     tailwind.config = {
@@ -24,7 +21,6 @@
     }
   </script>
   <style>
-    /* Animações e Scrollbars suaves */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
@@ -47,17 +43,13 @@
         </div>
       </div>
 
-      <!-- Ações do Topo -->
       <div class="flex items-center gap-2.5">
-        <!-- Alternar Tema Dark/Light -->
         <button onclick="toggleDarkMode()" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-darkbg-800 text-slate-600 dark:text-amber-400 hover:scale-105 transition">
           <i id="theme-icon" data-lucide="moon" class="w-4 h-4"></i>
         </button>
-
         <button onclick="abrirModalNovoLead()" class="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-md shadow-blue-500/20 active:scale-95 transition">
           <i data-lucide="user-plus" class="w-4 h-4"></i> Novo Lead
         </button>
-
         <button onclick="exportarDados()" title="Backup dos Dados em JSON" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-darkbg-800 rounded-xl border border-slate-200 dark:border-slate-700 transition">
           <i data-lucide="download" class="w-4 h-4"></i>
         </button>
@@ -68,7 +60,7 @@
   <!-- CONTEÚDO PRINCIPAL -->
   <main class="max-w-[1550px] mx-auto px-4 sm:px-6 py-6 flex-1 w-full space-y-6">
 
-    <!-- KPI CARDS COM ANIMAÇÕES -->
+    <!-- KPI CARDS -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="card-transition bg-white dark:bg-darkbg-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:-translate-y-0.5">
         <div class="flex items-center justify-between">
@@ -107,30 +99,27 @@
       </div>
     </section>
 
-    <!-- PAINEL FINANCEIRO COM NOVO DESIGN DO GRÁFICO E RETIRADA DE RECEITAS -->
+    <!-- PAINEL FINANCEIRO -->
     <section class="bg-white dark:bg-darkbg-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
       <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 gap-4">
         <div>
           <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-500"></i> Faturamento por Negócio Fechado
           </h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400">Valores adicionados ou zerados na tabela atualizam o gráfico imediatamente.</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Valores alterados na tabela atualizam o gráfico e os relatórios automaticamente.</p>
         </div>
 
         <div class="flex items-center gap-2">
-          <!-- Alternador de Tipo de Gráfico -->
           <div class="bg-slate-100 dark:bg-darkbg-800 p-1 rounded-xl flex text-xs">
             <button onclick="mudarTipoGrafico('bar')" id="btn-chart-bar" class="px-3 py-1 rounded-lg font-medium bg-white dark:bg-slate-700 shadow-sm text-slate-800 dark:text-white transition">Barras</button>
             <button onclick="mudarTipoGrafico('line')" id="btn-chart-line" class="px-3 py-1 rounded-lg font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 transition">Linhas</button>
           </div>
-          <!-- Botão Lançamento Manual -->
           <button onclick="adicionarReceitaManual()" class="inline-flex items-center gap-1.5 text-xs font-semibold bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-xl border border-blue-200 dark:border-blue-800 transition">
             <i data-lucide="plus" class="w-3.5 h-3.5"></i> Lançar Receita Manual
           </button>
         </div>
       </div>
 
-      <!-- Container do Canvas -->
       <div class="mt-4 relative h-72 w-full">
         <canvas id="receitaChart"></canvas>
       </div>
@@ -139,7 +128,6 @@
     <!-- BARRA DE CONTROLE: ABAS E BUSCA -->
     <section class="space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-3">
-        <!-- Navegação de Abas -->
         <div class="flex bg-slate-200/80 dark:bg-darkbg-800 p-1 rounded-xl text-xs sm:text-sm font-semibold">
           <button id="tab-ativos" onclick="mudarAba('ativos')" class="px-4 py-2 rounded-lg transition bg-white dark:bg-darkbg-900 text-slate-900 dark:text-white shadow-sm">
             🔥 Leads Ativos
@@ -152,14 +140,13 @@
           </button>
         </div>
 
-        <!-- Filtro Rápido de Pesquisa -->
         <div class="relative w-full md:w-80">
           <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400"></i>
           <input type="text" id="campo-busca" oninput="renderizarTabela()" placeholder="Filtrar por nome, cidade ou anotação..." class="w-full pl-9 pr-4 py-2 text-xs sm:text-sm bg-white dark:bg-darkbg-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition text-slate-900 dark:text-white" />
         </div>
       </div>
 
-      <!-- TABELA COM MAIS ESPAÇO PARA OBSERVAÇÕES -->
+      <!-- TABELA -->
       <div class="bg-white dark:bg-darkbg-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse">
@@ -170,13 +157,11 @@
                 <th class="px-4 py-3.5 min-w-[130px]">Segmento</th>
                 <th class="px-4 py-3.5 min-w-[170px]">Status do Funil</th>
                 <th class="px-4 py-3.5 min-w-[180px]">Receita Gerada (R$)</th>
-                <!-- ESPAÇO AMPLIADO PARA OBSERVAÇÃO -->
                 <th class="px-4 py-3.5 min-w-[340px]">Observações Detalhadas</th>
                 <th class="px-4 py-3.5 text-center w-16">Ações</th>
               </tr>
             </thead>
             <tbody id="tabela-leads" class="divide-y divide-slate-100 dark:divide-slate-800 text-xs sm:text-sm">
-              <!-- Renderizado dinamicamente via JS -->
             </tbody>
           </table>
         </div>
@@ -205,29 +190,43 @@
   </div>
 
   <script>
-    // DADOS INICIAIS
+    // DADOS INICIAIS COMPLETOS (Foto 1 + Foto 2)
     const leadsIniciais = [
-      { id: 1, empresa: "REINERT - SOLUÇÕES EM SOLDA", estimativa: "ENC26108", produto: "Maquinário", cidade: "Blumenau", uf: "SC", fone: "47999990001", status: "Fechado", valor: 14500, obs: "Máquina com entrada de 50%. Aguardando cronograma de entrega da transportadora para enviar o restante da documentação técnica.", data: "2026-09-03" },
-      { id: 2, empresa: "SMART REUSE LTDA", estimativa: "ENC26111", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Sem sucesso", valor: 0, obs: "Achou valor acima do teto de investimentos deste ano. Retornar no 1º trimestre de 2027.", data: "2026-09-16" },
-      { id: 3, empresa: "SILVA E CHAVES INDUSTRIA E COMÉRCIO", estimativa: "ENC26112", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Aguardando Retorno", valor: 0, obs: "Proposta técnica enviada com catálogo em anexo por e-mail e WhatsApp.", data: "2026-10-07" },
-      { id: 4, empresa: "J. FERNANDES", estimativa: "ENC26113", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Aguardando Retorno", valor: 0, obs: "Reunião de alinhamento com a equipe de compras dia 05 às 14h.", data: "2026-10-13" },
-      { id: 5, empresa: "TSB METALÚRGICA", estimativa: "ENC26114", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Fechado", valor: 28000, obs: "Aprovado pelo diretor executivo. Contrato assinado e comissionamento marcado.", data: "2026-10-14" },
-      { id: 6, empresa: "ROCHA EQUIPAMENTOS", estimativa: "ENC26116", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Aguardando Retorno", valor: 0, obs: "Aguardando aprovação de crédito bancário.", data: "2026-10-19" },
-      { id: 7, empresa: "TORNEADORA E MECANICA TALISMA", estimativa: "ENC26119", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Fechado", valor: 9200, obs: "Pagamento à vista realizado via Pix.", data: "2026-10-27" },
-      { id: 8, empresa: "Rex Helicoides", estimativa: "WHATSAPP", produto: "Fabricante", cidade: "Ibiraci", uf: "MG", fone: "5535999910614", status: "Orçamento Enviado", valor: 0, obs: "Interesse grande em espirais de 300mm. Pediram desconto para 3 unidades.", data: "2026-10-28" },
-      { id: 9, empresa: "Helicoides Brasil", estimativa: "WHATSAPP", produto: "Metalúrgica", cidade: "Goiânia", uf: "GO", fone: "5564993386203", status: "Orçamento Enviado", valor: 0, obs: "Primeiro contato WhatsApp pelo encarregado de produção.", data: "2026-10-28" },
-      { id: 10, empresa: "Torno e Helicoides São Jorge", estimativa: "WHATSAPP", produto: "Tornearia", cidade: "Ivaiporã", uf: "PR", fone: "554334721302", status: "Orçamento Enviado", valor: 0, obs: "Retornar na terça-feira após reunião de diretoria.", data: "2026-10-29" },
-      { id: 11, empresa: "Demakine Equipamentos", estimativa: "WHATSAPP", produto: "Agroindustrial", cidade: "Limeira", uf: "SP", fone: "551930339397", status: "A enviar", valor: 0, obs: "Solicitou cotação de maquinário completo com esteira.", data: "2026-10-29" },
-      { id: 12, empresa: "Tornocar Tornearia", estimativa: "ENC26120", produto: "Tornearia", cidade: "Dourados", uf: "MS", fone: "556734247671", status: "A enviar", valor: 0, obs: "Passar preços até as 15h para inclusão na ordem de compra.", data: "2026-10-29" }
+      // FOTO 1
+      { id: 1, empresa: "REINERT - SOLUÇÕES EM SOLDA", estimativa: "ENC26108", produto: "Maquinário", cidade: "Blumenau", uf: "SC", fone: "47999990001", status: "Fechado", valor: 14500, obs: "Fechado. Solicitante: Daniel. Entrada de 50%, aguardando envio da transportadora.", data: "2026-09-03" },
+      { id: 2, empresa: "SMART REUSE LTDA", estimativa: "ENC26111", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Sem sucesso", valor: 0, obs: "Enviado - Sem sucesso. Solicitante: Daniel. Retornar no 1º trimestre de 2027.", data: "2026-09-16" },
+      { id: 3, empresa: "SILVA E CHAVES INDUSTRIA E COMÉRCIO LTDA", estimativa: "ENC26112", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Aguardando Retorno", valor: 0, obs: "Enviado - Aguardando Retorno. Solicitante: Daniel.", data: "2026-10-07" },
+      { id: 4, empresa: "J. FERNANDES", estimativa: "ENC26113", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Aguardando Retorno", valor: 0, obs: "Enviado - Aguardando Retorno. Solicitante: Daniel.", data: "2026-10-13" },
+      { id: 5, empresa: "TSB METALÚRGICA", estimativa: "ENC26114", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Fechado", valor: 28000, obs: "Fechado. Solicitante: Daniel. Contrato assinado.", data: "2026-10-14" },
+      { id: 6, empresa: "ROCHA EQUIPAMENTOS (Cotação 1)", estimativa: "ENC26116", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Aguardando Retorno", valor: 0, obs: "Enviado - Aguardando Retorno. Solicitante: Daniel.", data: "2026-10-19" },
+      { id: 7, empresa: "ROCHA EQUIPAMENTOS (Cotação 2)", estimativa: "ENC26117", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Aguardando Retorno", valor: 0, obs: "Enviado - Aguardando Retorno. Solicitante: Daniel.", data: "2026-10-19" },
+      { id: 8, empresa: "JM MECÂNICA", estimativa: "ENC26118", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Aguardando Retorno", valor: 0, obs: "Enviado - Aguardando Retorno. Solicitante: Daniel.", data: "2026-10-20" },
+      { id: 9, empresa: "TORNEADORA E MECANICA TALISMA", estimativa: "ENC26119", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Fechado", valor: 9200, obs: "Fechado. Solicitante: Daniel. Pagamento realizado à vista.", data: "2026-10-27" },
+      { id: 10, empresa: "TORNOCAR (Tornocar Tornearia)", estimativa: "ENC26120", produto: "Tornearia", cidade: "Dourados", uf: "MS", fone: "556734247671", status: "A enviar", valor: 0, obs: "A enviar. Solicitante: Daniel. Passar proposta até as 15h.", data: "2026-10-29" },
+      // FOTO 2
+      { id: 11, empresa: "Rex Helicoides", estimativa: "WHATSAPP", produto: "Fabricante", cidade: "Ibiraci", uf: "MG", fone: "5535999910614", status: "Orçamento Enviado", valor: 0, obs: "Interesse em espirais de 300mm. Pediram desconto para 3 unidades.", data: "2026-10-28" },
+      { id: 12, empresa: "Helicoides Brasil", estimativa: "WHATSAPP", produto: "Metalúrgica", cidade: "Goiânia", uf: "GO", fone: "5564993386203", status: "Orçamento Enviado", valor: 0, obs: "Primeiro contato WhatsApp pelo encarregado de produção.", data: "2026-10-28" },
+      { id: 13, empresa: "Torno e Helicoides São Jorge", estimativa: "WHATSAPP", produto: "Tornearia", cidade: "Ivaiporã", uf: "PR", fone: "554334721302", status: "Orçamento Enviado", valor: 0, obs: "Contato via WhatsApp / Fixo com WhatsApp habilitado.", data: "2026-10-29" },
+      { id: 14, empresa: "Demakine Equipamentos Agroindustriais", estimativa: "WHATSAPP", produto: "Fabricante", cidade: "Limeira", uf: "SP", fone: "551930339397", status: "A enviar", valor: 0, obs: "Solicitou cotação de maquinário completo com esteira.", data: "2026-10-29" },
+      { id: 15, empresa: "Casarini Equipamentos Industriais Ltda", estimativa: "WHATSAPP", produto: "Metalúrgica", cidade: "São Paulo", uf: "SP", fone: "551139343777", status: "A enviar", valor: 0, obs: "Prospecção ativa via lista industrial.", data: "2026-10-29" },
+      { id: 16, empresa: "Referencial Projetos Ltda", estimativa: "WHATSAPP", produto: "Metalúrgica", cidade: "Curitiba", uf: "PR", fone: "554130798128", status: "A enviar", valor: 0, obs: "Projetos e montagens metálicas industriais.", data: "2026-10-29" },
+      { id: 17, empresa: "BRX Sistemas Industria e Comercio Ltda.", estimativa: "WHATSAPP", produto: "Equipamentos", cidade: "Jundiaí", uf: "SP", fone: "551142300916", status: "A enviar", valor: 0, obs: "Fabricante de sistemas e maquinários industriais.", data: "2026-10-29" },
+      { id: 18, empresa: "Tornearia Nova Horizonte | Torno e Solda", estimativa: "WHATSAPP", produto: "Tornearia", cidade: "Luís Eduardo Magalhães", uf: "BA", fone: "5577999716634", status: "A enviar", valor: 0, obs: "Torno, solda e recuperação de peças para agro e indústria.", data: "2026-10-29" },
+      { id: 19, empresa: "Mecânica Industrial Nardeli - Usinagem", estimativa: "WHATSAPP", produto: "Serviço de Usinagem", cidade: "Ponta Grossa", uf: "PR", fone: "554232361776", status: "A enviar", valor: 0, obs: "Usinagem de precisão e recuperação de componentes.", data: "2026-10-29" },
+      { id: 20, empresa: "Calderol Grupack", estimativa: "WHATSAPP", produto: "Fabricante", cidade: "Diadema", uf: "SP", fone: "551123118372", status: "A enviar", valor: 0, obs: "Caldeiraria, estruturas metálicas e equipamentos.", data: "2026-10-29" },
+      { id: 21, empresa: "K-zin Soluções Industriais (Grupo C+K)", estimativa: "WHATSAPP", produto: "Fabricante", cidade: "Diadema", uf: "SP", fone: "551143425752", status: "A enviar", valor: 0, obs: "Soluções e montagens industriais em Diadema/SP.", data: "2026-10-29" },
+      { id: 22, empresa: "MG Metalúrgica Gravino", estimativa: "WHATSAPP", produto: "Metalúrgica", cidade: "Cotia", uf: "SP", fone: "551146122851", status: "A enviar", valor: 0, obs: "Corte, dobra e usinagem para linha de produção.", data: "2026-10-29" },
+      { id: 23, empresa: "Mared Equipamentos Agroindustriais", estimativa: "WHATSAPP", produto: "Metalúrgica", cidade: "Londrina", uf: "PR", fone: "554333270938", status: "A enviar", valor: 0, obs: "Equipamentos para armazenagem e processamento agroindustrial.", data: "2026-10-29" },
+      { id: 24, empresa: "Agriaço", estimativa: "WHATSAPP", produto: "Fabricante", cidade: "Condor", uf: "RS", fone: "555531800069", status: "A enviar", valor: 0, obs: "Componentes agropecuários e peças em aço.", data: "2026-10-29" }
     ];
 
-    let leads = JSON.parse(localStorage.getItem('crm_leads_data_v2')) || leadsIniciais;
+    // Atualizado para v3 para carregar a nova lista completa no navegador
+    let leads = JSON.parse(localStorage.getItem('crm_leads_data_v3')) || leadsIniciais;
     let abaAtual = 'ativos';
     let chartInstance = null;
     let tipoGraficoAtual = 'bar';
     let idLeadEditandoObs = null;
 
-    // GERENCIAMENTO DE MODO ESCURO
     function initDarkMode() {
       const isDark = localStorage.getItem('crm_theme') === 'dark';
       document.documentElement.classList.toggle('dark', isDark);
@@ -238,7 +237,7 @@
       const isDark = document.documentElement.classList.toggle('dark');
       localStorage.setItem('crm_theme', isDark ? 'dark' : 'light');
       atualizarIconeTema(isDark);
-      atualizarDashboard(); // Recria gráfico com cores corretas
+      atualizarDashboard();
     }
 
     function atualizarIconeTema(isDark) {
@@ -250,7 +249,7 @@
     }
 
     function salvarDados() {
-      localStorage.setItem('crm_leads_data_v2', JSON.stringify(leads));
+      localStorage.setItem('crm_leads_data_v3', JSON.stringify(leads));
       atualizarDashboard();
     }
 
@@ -276,7 +275,6 @@
         const match = (l.empresa + l.produto + (l.cidade || '') + (l.obs || '')).toLowerCase().includes(busca);
         if (!match) return false;
 
-        // Regra restrita: Sem Sucesso NÃO pode ficar na mesma tela de ativos nem de fechados!
         if (abaAtual === 'arquivados') return l.status === 'Sem sucesso';
         if (abaAtual === 'fechados') return l.status === 'Fechado';
         return l.status !== 'Sem sucesso' && l.status !== 'Fechado';
@@ -293,33 +291,29 @@
           <a href="https://wa.me/${cleanPhone}?text=Ol%C3%A1%2C%20gostaria%20de%20falar%20sobre%20sua%20cota%C3%A7%C3%A3o." target="_blank" class="inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 font-medium transition">
             <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Iniciar Chat
           </a>
-        ` : '<span class="text-xs text-slate-400">Sem telefone</span>';
+        ` : '<span class="text-xs text-slate-400">Sem WhatsApp</span>';
 
         tr.innerHTML = `
-          <!-- Empresa -->
           <td class="px-4 py-3">
             <div class="font-bold text-slate-900 dark:text-white">${lead.empresa}</div>
             <div class="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
               <span class="font-mono bg-slate-100 dark:bg-darkbg-800 px-1 rounded">${lead.estimativa || 'S/N'}</span>
               <span>•</span>
-              <span>${lead.cidade ? lead.cidade + '/' + lead.uf : 'Brasil'}</span>
+              <span>${lead.cidade ? lead.cidade + '/' + lead.uf : (lead.uf ? lead.uf : 'Brasil')}</span>
             </div>
           </td>
 
-          <!-- WhatsApp -->
           <td class="px-4 py-3">
             <div class="text-xs font-mono text-slate-600 dark:text-slate-300 mb-1">${lead.fone || '-'}</div>
             ${whatsBtn}
           </td>
 
-          <!-- Produto -->
           <td class="px-4 py-3">
             <span class="inline-block bg-slate-100 dark:bg-darkbg-800 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg text-xs font-medium">
               ${lead.produto}
             </span>
           </td>
 
-          <!-- Status Dropdown -->
           <td class="px-4 py-3">
             <select onchange="atualizarStatus(${lead.id}, this.value)" class="text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 bg-white dark:bg-darkbg-800 text-slate-800 dark:text-slate-200 shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer">
               <option value="A enviar" ${lead.status === 'A enviar' ? 'selected' : ''}>⏳ A enviar</option>
@@ -330,7 +324,6 @@
             </select>
           </td>
 
-          <!-- Valor de Receita (COM BOTÃO DE RETIRAR / ZERAR) -->
           <td class="px-4 py-3">
             <div class="relative flex items-center">
               <span class="absolute left-2.5 text-xs font-bold text-slate-400">R$</span>
@@ -339,12 +332,11 @@
                 class="w-32 pl-8 pr-7 py-1.5 text-xs font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-darkbg-800 text-slate-900 dark:text-white focus:bg-white dark:focus:bg-darkbg-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               />
               ${lead.valor > 0 ? `
-                <button onclick="retirarReceita(${lead.id})" title="Retirar receita do gráfico" class="absolute right-2 text-slate-400 hover:text-rose-500 text-xs font-bold transition">✕</button>
+                <button onclick="retirarReceita(${lead.id})" title="Zerar receita" class="absolute right-2 text-slate-400 hover:text-rose-500 text-xs font-bold transition">✕</button>
               ` : ''}
             </div>
           </td>
 
-          <!-- OBSERVAÇÕES AMPLIADAS (TEXTAREA + BOTÃO EXPANDIR) -->
           <td class="px-4 py-3">
             <div class="flex items-start gap-2">
               <textarea rows="2" placeholder="Escreva anotações, detalhes, valores..."
@@ -357,7 +349,6 @@
             </div>
           </td>
 
-          <!-- Ação Excluir -->
           <td class="px-4 py-3 text-center">
             <button onclick="removerLead(${lead.id})" title="Excluir Registro" class="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -370,7 +361,6 @@
       lucide.createIcons();
     }
 
-    // MODAL DE OBSERVAÇÃO
     function abrirModalObs(id) {
       idLeadEditandoObs = id;
       const lead = leads.find(l => l.id === id);
@@ -393,7 +383,6 @@
       }
     }
 
-    // ALTERAÇÃO DE DADOS
     function atualizarStatus(id, novoStatus) {
       const item = leads.find(l => l.id === id);
       if (item) {
@@ -410,11 +399,10 @@
       }
     }
 
-    // FUNÇÃO PARA RETIRAR RECEITA FACILMENTE DO GRÁFICO
     function retirarReceita(id) {
       const item = leads.find(l => l.id === id);
       if (item) {
-        if(confirm(`Deseja retirar a receita de R$ ${item.valor.toLocaleString('pt-BR')} de "${item.empresa}" do gráfico?`)) {
+        if(confirm(`Deseja zerar a receita de R$ ${item.valor.toLocaleString('pt-BR')} de "${item.empresa}"?`)) {
           item.valor = 0;
           salvarDados();
         }
@@ -503,7 +491,6 @@
       atualizarDashboard();
     }
 
-    // DASHBOARD & GRÁFICO ANIMADO COM NOVO DESIGN
     function atualizarDashboard() {
       const fechados = leads.filter(l => l.status === 'Fechado' && (l.valor || 0) > 0);
       const abertos = leads.filter(l => l.status !== 'Fechado' && l.status !== 'Sem sucesso');
@@ -531,7 +518,6 @@
         chartInstance.destroy();
       }
 
-      // Gradiente moderno de Fintech (Azul -> Roxo)
       const gradient = ctx.createLinearGradient(0, 0, 0, 300);
       gradient.addColorStop(0, 'rgba(59, 130, 246, 0.9)');
       gradient.addColorStop(1, 'rgba(99, 102, 241, 0.4)');
@@ -595,7 +581,6 @@
       });
     }
 
-    // Inicialização
     window.onload = () => {
       initDarkMode();
       atualizarDashboard();
