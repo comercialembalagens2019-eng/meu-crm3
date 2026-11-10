@@ -1,590 +1,245 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CRM & Pipeline Industrial Pro</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: { 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
-            darkbg: { 800: '#1e293b', 900: '#0f172a', 950: '#020617' }
-          }
-        }
-      }
-    }
-  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f7f5">
+  <title>Oficina CRM · Leads</title>
   <style>
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
-    .dark ::-webkit-scrollbar-thumb { background: #334155; }
-    .card-transition { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+    :root{--ink:#17231f;--muted:#75817b;--line:#e8ede9;--green:#216b4d;--green2:#e6f2eb;--bg:#f5f7f5;--white:#fff;--amber:#bd7c1a;--amberbg:#fff3d9;--rose:#b84d43;--rosebg:#fceae7;--shadow:0 14px 40px rgba(28,55,42,.07)}
+    *:focus-visible{outline:3px solid #91c6a1;outline-offset:2px}button:focus:not(:focus-visible){outline:none}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Segoe UI',Arial,sans-serif;font-size:14px}button,input,select,textarea{font:inherit}button{cursor:pointer} .app{min-height:100vh;display:grid;grid-template-columns:240px minmax(0,1fr)}
+    aside{background:#173b2e;color:#e7f0ea;padding:27px 17px;display:flex;flex-direction:column;gap:32px}.brand{display:flex;gap:11px;align-items:center;padding:0 9px}.brandmark{width:34px;height:34px;border-radius:11px;background:#c2e4ca;color:#17402f;display:grid;place-items:center;font-size:19px;font-weight:800}.brand strong{display:block;font:800 15px Manrope}.brand small{color:#a8c2b3;font-size:11px}.navtitle{padding:0 12px;color:#8eaa99;text-transform:uppercase;letter-spacing:1.2px;font-size:10px;font-weight:700;margin-bottom:8px}.nav{display:grid;gap:4px}.nav button{border:0;background:transparent;color:#bdd0c4;padding:11px 12px;border-radius:9px;text-align:left;display:flex;align-items:center;gap:12px;font-weight:600}.nav button.active,.nav button:hover{background:#28533f;color:white}.nav .ico{width:18px;text-align:center;font-size:16px}.side-bottom{margin-top:auto;border:1px solid #39624d;border-radius:12px;padding:14px;color:#bdd0c4;font-size:12px;line-height:1.55}.local-dot{display:inline-block;width:7px;height:7px;background:#7bdb9c;border-radius:50%;margin-right:6px}
+    main{min-width:0;padding:30px clamp(20px,4vw,56px) 50px;max-width:1600px;width:100%;margin:auto}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:27px}.eyebrow{font-size:12px;color:var(--muted);margin-bottom:5px}.topbar h1{font:800 clamp(24px,3vw,32px) 'Segoe UI',Arial,sans-serif;margin:0;letter-spacing:-1px}.top-actions{display:flex;gap:9px}.btn{border:1px solid var(--line);background:white;color:var(--ink);border-radius:9px;padding:10px 14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;box-shadow:0 2px 5px #15291c08}.btn:hover{border-color:#bdcfc3}.btn.primary{background:var(--green);border-color:var(--green);color:white}.btn.primary:hover{background:#174f38}.mobilebrand{display:none}.cloud-status{font-size:11px;font-weight:700;color:#8a6a2f;background:#fff4db;padding:8px 11px;border:1px solid #f0e3c5;border-radius:22px;white-space:nowrap}.cloud-status.online{color:#286b45;background:#e7f4eb;border-color:#d4e9da}.cloud-status.error{color:#a5423b;background:#fff0ee;border-color:#f2d4d1}
+    .welcome{background:linear-gradient(110deg,#e5f1e9,#f1f6ef 68%,#e7f1e6);border:1px solid #dce9df;border-radius:16px;padding:22px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;overflow:hidden;position:relative}.welcome:after{content:'✳';font-size:104px;color:#c8e1ce;position:absolute;right:18%;top:-28px;opacity:.55}.welcome h2{font:700 17px Manrope;margin:0 0 6px;position:relative;z-index:1}.welcome p{margin:0;color:#60736a;font-size:13px;position:relative;z-index:1}.welcome .pill{position:relative;z-index:1;background:white;color:#316748;border:1px solid #d3e4d8;border-radius:30px;padding:8px 12px;font-size:11px;font-weight:700;white-space:nowrap}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:23px}.stat{background:white;border:1px solid var(--line);border-radius:13px;padding:17px 18px;min-height:112px}.stathead{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:12px;font-weight:600}.staticon{width:30px;height:30px;border-radius:9px;background:#f0f5f1;display:grid;place-items:center}.stat strong{display:block;font:800 27px Manrope;margin-top:11px;letter-spacing:-1px}.stat small{font-size:11px;color:#8a948e;margin-left:6px;font-weight:500}
+    .board{background:white;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);overflow:hidden}.boardhead{padding:19px 21px 15px;display:flex;justify-content:space-between;align-items:center;gap:16px}.boardhead h2{font:700 16px Manrope;margin:0 0 4px}.boardhead p{margin:0;color:var(--muted);font-size:12px}.boardtools{display:flex;gap:9px;align-items:center}.search{position:relative}.search span{position:absolute;left:11px;top:9px;color:#8e9b93}.search input{width:218px;padding:9px 10px 9px 33px;border:1px solid var(--line);border-radius:8px;outline:none}.search input:focus,.filter:focus{border-color:#74a887;box-shadow:0 0 0 3px #dceddf}.filter{border:1px solid var(--line);background:white;border-radius:8px;padding:9px 10px;color:#59665e;outline:none}.tabs{padding:0 21px;display:flex;gap:21px;border-bottom:1px solid var(--line);overflow-x:auto}.tab{background:none;border:0;padding:11px 1px 12px;color:#849087;font-weight:700;font-size:12px;white-space:nowrap;border-bottom:2px solid transparent}.tab.active{color:var(--green);border-bottom-color:var(--green)}.tab em{font-style:normal;font-size:10px;margin-left:5px;background:#f0f3f0;padding:3px 6px;border-radius:10px;color:#76827a}
+    .tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:970px}th{text-align:left;padding:12px 17px;background:#fbfcfb;color:#8a958e;text-transform:uppercase;letter-spacing:.65px;font-size:10px;font-weight:700;border-bottom:1px solid var(--line)}td{padding:13px 17px;border-bottom:1px solid #eef1ee;vertical-align:middle}tbody tr:hover{background:#fcfdfc}tbody tr:last-child td{border-bottom:0}.company{display:flex;align-items:center;gap:11px;min-width:205px}.avatar{height:34px;width:34px;border-radius:10px;background:#e8f1ea;color:#397052;display:grid;place-items:center;font-weight:800;font-size:12px;flex:none}.co-name{font-weight:700;font-size:12px;color:#25342c}.co-sub{font-size:10px;color:#929c95;margin-top:3px}.location{color:#59665e;font-size:12px}.stage{position:relative}.stage select{appearance:none;border:0;border-radius:20px;padding:6px 23px 6px 10px;font-size:10px;font-weight:700;cursor:pointer;max-width:166px;outline:none}.stage:after{content:'⌄';position:absolute;right:9px;top:3px;font-size:12px;pointer-events:none;color:currentColor}.stage select[data-stage="Prospectado"]{background:#f2eadb;color:#876c42}.stage select[data-stage="Orçamento enviado"],.stage select[data-stage="Aguardando retorno"],.stage select[data-stage="Orçamento a enviar"]{background:var(--amberbg);color:#936410}.stage select[data-stage="Fechado"]{background:var(--green2);color:#36714d}.stage select[data-stage="Sem sucesso"]{background:var(--rosebg);color:#a34b43}.date{font-size:11px;color:#6d7971;white-space:nowrap}.note-cell button{background:none;border:0;color:#5f7667;font-size:11px;padding:5px 3px}.note-cell button:hover{color:var(--green);text-decoration:underline}.note-cell .empty{color:#a1aaa4}.actions{display:flex;gap:8px}.iconbtn{height:29px;width:29px;border:1px solid var(--line);background:#fff;border-radius:8px;color:#68766d;display:grid;place-items:center;text-decoration:none;font-size:13px}.iconbtn:hover{color:var(--green);border-color:#b9d1c0}.empty-state{text-align:center;padding:50px;color:var(--muted)}
+    .footer{display:flex;justify-content:space-between;align-items:center;padding:14px 21px;border-top:1px solid var(--line);color:#89948d;font-size:11px}.toast{position:fixed;right:22px;bottom:22px;background:#173b2e;color:white;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none;z-index:5}.toast.show{opacity:1;transform:none}
+    .modalback{position:fixed;inset:0;background:#10201977;display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.modalback.open{display:flex}.modal{background:white;width:min(520px,100%);border-radius:16px;box-shadow:0 24px 80px #10201935;padding:22px}.modalhead{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}.modalhead h2{font:800 19px Manrope;margin:0 0 4px}.modalhead p{margin:0;font-size:12px;color:var(--muted)}.close{border:0;background:#f2f5f2;border-radius:8px;width:31px;height:31px;font-size:18px;color:#526158}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:11px;font-weight:700;color:#65736a}.field input,.field select,.field textarea{border:1px solid var(--line);border-radius:8px;padding:10px 11px;outline:none;color:var(--ink)}.field textarea{min-height:105px;resize:vertical}.field :focus{border-color:#74a887}.modalfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.delete{margin-right:auto;color:var(--rose);background:#fff;border-color:#f0d6d2}.hidden{display:none!important}
+    @media(max-width:950px){.app{grid-template-columns:70px minmax(0,1fr)}aside{padding:23px 10px;align-items:center}.brand{padding:0}.brandtext,.navtitle,.nav button .label,.side-bottom{display:none}.nav{width:100%}.nav button{justify-content:center;padding:11px 0}.nav button .ico{font-size:18px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:650px){.app{display:block}aside{display:none}main{padding:20px 13px 35px}.topbar{align-items:flex-start;margin-bottom:18px}.topbar h1{font-size:25px}.top-actions{flex-wrap:wrap;justify-content:flex-end;max-width:65%}.top-actions .btn{padding:9px 10px;font-size:11px}.top-actions .btn.export{display:none}.cloud-status{font-size:10px;padding:7px 9px}.welcome{padding:18px;align-items:flex-start;gap:12px}.welcome:after{right:-12px}.welcome p{max-width:260px;line-height:1.45}.welcome .pill{font-size:10px;padding:7px 9px}.stats{gap:9px}.stat{padding:14px;min-height:100px}.stat strong{font-size:23px}.stathead{font-size:10px}.staticon{height:27px;width:27px}.boardhead{padding:16px;align-items:flex-start;flex-direction:column}.boardtools{width:100%;flex-wrap:wrap}.search{flex:1;min-width:180px}.search input{width:100%}.tabs{padding:0 16px;gap:16px}.tablewrap{overflow:visible}table{min-width:0}thead{display:none}tbody tr{display:grid;grid-template-columns:1fr auto;gap:0 10px;padding:12px 16px;border-bottom:1px solid var(--line)}td{padding:3px 0;border:0}td:first-child{grid-column:1/-1;padding-bottom:8px}.company{min-width:0}.location{grid-column:1}.stage{grid-column:2;grid-row:2/4;align-self:center}.stage select{max-width:150px}.date{grid-column:1}.note-cell{grid-column:1/-1;padding-top:5px}.actions{grid-column:2;grid-row:4;justify-content:flex-end}.footer{padding:13px 16px}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+  </style>
+  <style id="crm-visual-polish">
+    :root{--ink:#15271f;--muted:#708078;--line:#e4ebe5;--green:#1f6549;--green2:#e4f1e8;--bg:#f3f6f3;--shadow:0 18px 44px rgba(27,57,41,.075)}
+    body{background:radial-gradient(ellipse at 74% -12%,#e7f0e8 0,transparent 34%),var(--bg);letter-spacing:.005em}
+    aside{position:sticky;top:0;height:100vh;background:linear-gradient(165deg,#163c2f 0%,#17382d 58%,#1c4937 100%);box-shadow:8px 0 30px rgba(22,49,35,.07)}
+    .brandmark{box-shadow:0 6px 16px #0c24172b;transition:transform .25s ease,box-shadow .25s ease}.brand:hover .brandmark{transform:rotate(-7deg) scale(1.06);box-shadow:0 9px 20px #0c24173b}
+    .nav button{position:relative;transition:background .2s ease,color .2s ease,transform .2s ease}.nav button:hover{transform:translateX(3px)}.nav button.active{box-shadow:inset 3px 0 #b8e1c3}
+    main{max-width:1540px;animation:page-enter .5s cubic-bezier(.2,.75,.25,1) both}
+    .topbar{margin-bottom:24px}.eyebrow{text-transform:capitalize;letter-spacing:.025em}.topbar h1{letter-spacing:-1.2px}
+    .welcome{background:linear-gradient(112deg,#e0eee4 0%,#edf4ed 53%,#e7f0e4 100%);border-color:#d9e7dc;box-shadow:inset 0 1px #ffffffb0;min-height:104px;transition:box-shadow .25s ease,transform .25s ease}.welcome:hover{box-shadow:0 12px 26px #315d3d12;transform:translateY(-1px)}.welcome:after{font-size:128px;right:14%;top:-41px;transform:rotate(-10deg);animation:slow-orbit 24s linear infinite}.welcome h2{letter-spacing:-.35px}
+    .stats{gap:15px}.stat{position:relative;overflow:hidden;border-color:#e5ebe6;box-shadow:0 3px 12px #1b39290a;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;animation:card-enter .42s both}.stat:nth-child(2){animation-delay:.06s}.stat:nth-child(3){animation-delay:.12s}.stat:nth-child(4){animation-delay:.18s}.stat:hover{transform:translateY(-3px);box-shadow:0 14px 28px #1b39291a;border-color:#d3e3d7}.stat strong{letter-spacing:-1.4px}.staticon{color:#397454;background:#edf5ef;transition:transform .25s ease,background .25s ease}.stat:hover .staticon{transform:scale(1.08) rotate(-5deg);background:#e0efe4}
+    .board{border-color:#e2e9e3;box-shadow:0 18px 48px rgba(27,57,41,.065);transition:box-shadow .25s ease}.board:hover{box-shadow:0 20px 52px rgba(27,57,41,.085)}.boardhead h2{letter-spacing:-.25px}.tabs{scrollbar-width:thin;scrollbar-color:#d8e1da transparent}.tab{transition:color .18s ease,border-color .18s ease}.tab:hover{color:var(--green)}.tab.active em{background:#e6f2e9;color:#397450}
+    th{background:#f8faf8}.company{min-width:220px}.co-name{font-size:12.5px;line-height:1.35}.co-sub{line-height:1.4}.avatar{box-shadow:inset 0 0 0 1px #d9e8dd;transition:transform .2s ease,background .2s ease}.company:hover .avatar{transform:scale(1.07);background:#e0efe4}
+    tbody tr{animation:row-enter .25s both;transition:background .18s ease}.stage select{transition:filter .18s ease,transform .18s ease}.stage select:hover{filter:saturate(1.12);transform:translateY(-1px)}.stage select:focus-visible{outline:2px solid #86b997;outline-offset:2px}
+    .search input,.filter{transition:border-color .18s ease,box-shadow .18s ease,background .18s ease}.search input:focus,.filter:focus{background:#fff}
+    .btn,.iconbtn{transition:transform .16s ease,box-shadow .2s ease,border-color .2s ease,background .2s ease}.btn:hover{transform:translateY(-1px);box-shadow:0 6px 14px #173b2e12}.btn:active,.iconbtn:active{transform:scale(.97)}.btn.primary{box-shadow:0 5px 13px #216b4d26}.btn.primary:hover{box-shadow:0 8px 18px #216b4d35}
+    .iconbtn{width:32px;height:32px}.iconbtn:hover{background:#f3f8f4;transform:translateY(-1px)}
+    .modalback{backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}.modalback.open{animation:veil-enter .2s ease both}.modal{border:1px solid #e8eee9;box-shadow:0 28px 90px #10201940;animation:modal-enter .28s cubic-bezier(.2,.8,.2,1) both}.close{transition:transform .18s ease,background .18s ease}.close:hover{transform:rotate(90deg);background:#e8eee9}
+    .toast{box-shadow:0 16px 38px #10201935}.empty-state{line-height:1.7}.footer{background:linear-gradient(#fff,#fcfdfc)}
+    .cloud-connected{border:1px solid #d7e8dc;background:linear-gradient(120deg,#f1f8f2,#f8fbf8);border-radius:12px;padding:18px;color:#365a43;line-height:1.6}.cloud-connected strong{display:block;color:#1d6144;margin-bottom:5px}.cloud-connected span{font-size:12px;color:#6a7d71;overflow-wrap:anywhere}
+    @keyframes page-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes card-enter{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @keyframes row-enter{from{opacity:0}to{opacity:1}}
+    @keyframes veil-enter{from{opacity:0}to{opacity:1}}
+    @keyframes modal-enter{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @keyframes slow-orbit{to{transform:rotate(350deg)}}
+    @media(max-width:950px){aside{border-radius:0 18px 18px 0}.nav button.active{box-shadow:inset 0 -3px #b8e1c3}}
+    @media(max-width:650px){.welcome{min-height:unset}.welcome:after{font-size:86px;right:-9px;top:-20px}.welcome .pill{white-space:normal;text-align:center;max-width:116px;line-height:1.35}.stats{gap:10px}.stat{border-radius:12px}.stat:hover{transform:translateY(-1px)}.board{border-radius:14px}.boardhead{gap:13px}.tabs{scroll-snap-type:x proximity}.tab{scroll-snap-align:start}.footer span:last-child{max-width:48%;text-align:right;line-height:1.4}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+  </style>
+  <style id="crm-finance">
+    .finance-panel{margin:22px 0 24px;background:linear-gradient(135deg,#173d30 0%,#1c4b38 65%,#216347 100%);border:1px solid #1c523b;border-radius:18px;padding:23px;color:#f4faf5;box-shadow:0 18px 46px rgba(19,57,39,.16);overflow:hidden;position:relative;animation:card-enter .45s both}
+    .finance-panel:before{content:'';position:absolute;width:360px;height:360px;border-radius:50%;right:-140px;top:-230px;background:radial-gradient(circle,#ffffff19,transparent 68%);pointer-events:none}
+    .finance-head{position:relative;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:18px}.finance-title{display:flex;align-items:center;gap:11px}.finance-icon{width:40px;height:40px;border-radius:13px;background:#ffffff18;display:grid;place-items:center;font-size:20px;box-shadow:inset 0 1px #ffffff22}.finance-kicker{font-size:10px;letter-spacing:1.1px;text-transform:uppercase;color:#b4d6bf;font-weight:800;margin-bottom:4px}.finance-head h2{font:750 20px Manrope,'Segoe UI',sans-serif;letter-spacing:-.35px;margin:0}.finance-head p{font-size:12px;color:#c0d9c9;margin:5px 0 0}
+    .finance-controls{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}.period-switch{display:flex;align-items:center;gap:3px;padding:4px;border-radius:10px;background:#ffffff13;border:1px solid #ffffff20}.period-switch button{border:0;border-radius:7px;padding:7px 9px;background:transparent;color:#d2e6d8;font-size:11px;font-weight:700;transition:background .2s,color .2s,transform .15s}.period-switch button:hover{color:#fff;transform:translateY(-1px)}.period-switch button.active{background:#f6fbf7;color:#23563c;box-shadow:0 2px 8px #0d2b1b33}.finance-add{background:#d3f0db!important;color:#174631!important;border-color:#d3f0db!important;white-space:nowrap}
+    .finance-kpis{position:relative;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:10px;margin-bottom:13px}.finance-kpi{padding:13px 15px;border:1px solid #ffffff1d;border-radius:12px;background:#ffffff0d;min-width:0}.finance-kpi span{display:block;color:#c1daca;font-size:10px;font-weight:650}.finance-kpi strong{display:block;margin-top:7px;font:750 20px Manrope,'Segoe UI',sans-serif;letter-spacing:-.5px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.finance-kpi.primary-kpi{background:linear-gradient(120deg,#ffffff18,#ffffff0b);border-color:#ffffff30}.finance-kpi.primary-kpi strong{font-size:25px}.finance-kpi small{display:block;color:#b4d3bf;font-size:10px;margin-top:4px}
+    .finance-body{position:relative;display:grid;grid-template-columns:minmax(0,1.75fr) minmax(250px,.85fr);gap:12px}.finance-card{background:#fff;border:1px solid #e4eee6;border-radius:13px;color:var(--ink);overflow:hidden;box-shadow:0 5px 16px #102b1b12}.chart-card{padding:16px 17px 13px}.finance-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.finance-card-head h3{font:750 13px Manrope,'Segoe UI',sans-serif;margin:0;color:#1e3529}.finance-card-head p{font-size:10px;color:#87938b;margin:4px 0 0}.chart-total{font-size:11px;color:#26704d;font-weight:800;text-align:right;white-space:nowrap}.chart-wrap{height:225px;position:relative;margin-top:11px}.chart-svg{display:block;width:100%;height:100%;overflow:visible}.chart-grid{stroke:#e8eee9;stroke-width:1;stroke-dasharray:4 6}.chart-axis{fill:#8b978f;font:10px 'Segoe UI',Arial,sans-serif}.chart-area{fill:url(#financeArea)}.chart-line{fill:none;stroke:#24764e;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1400;stroke-dashoffset:1400;animation:chart-draw 1.1s cubic-bezier(.25,.7,.2,1) forwards}.chart-point{cursor:pointer;outline:none}.chart-point circle.outer{fill:#fff;stroke:#25794f;stroke-width:2.5;transition:r .2s,stroke-width .2s,filter .2s}.chart-point circle.inner{fill:#25794f}.chart-point:hover circle.outer,.chart-point:focus circle.outer{r:8;stroke-width:3;filter:drop-shadow(0 2px 4px #25794f45)}.chart-tooltip{position:absolute;z-index:2;display:none;transform:translate(-50%,-115%);background:#163d2d;color:#fff;padding:8px 10px;border-radius:9px;font-size:10px;box-shadow:0 8px 22px #10201932;white-space:nowrap;pointer-events:none}.chart-tooltip strong{display:block;font-size:11px;margin-top:3px}.chart-empty{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;color:#849188;font-size:11px;line-height:1.5;max-width:240px;pointer-events:none}.chart-empty.hidden{display:none}.chart-labels{display:flex;justify-content:space-between;padding:0 5px 0 42px;color:#88948c;font-size:9px;margin-top:-2px}
+    .recent-card{padding:16px 15px;display:flex;flex-direction:column;min-height:310px}.recent-list{display:grid;align-content:start;gap:1px;margin-top:10px}.revenue-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:10px 0;border-top:1px solid #edf1ed}.revenue-desc{font-size:11px;font-weight:750;color:#293a30;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.revenue-edit{display:block;max-width:100%;border:0;background:none;padding:0;text-align:left;font:inherit;cursor:pointer}.revenue-edit:hover{color:#28734e;text-decoration:underline}.revenue-meta{font-size:9px;color:#8a968d;margin-top:4px}.revenue-actions{display:flex;align-items:center;gap:4px}.revenue-value{font-size:11px;font-weight:800;color:#28734e;text-align:right;white-space:nowrap}.revenue-remove{border:0;background:transparent;color:#9ca79f;padding:2px 0 0 5px;font-size:10px;cursor:pointer}.revenue-remove:hover{color:#ad5149}.finance-empty{padding:24px 8px;text-align:center;color:#87948b;font-size:10px;line-height:1.55}.finance-empty strong{display:block;color:#57675d;font-size:11px;margin-bottom:3px}.finance-footnote{font-size:9px;color:#9aaba0;margin-top:auto;padding-top:12px}
+    .revenue-cell{min-width:176px}.process-revenue{display:flex;align-items:center;gap:6px}.process-amount{position:relative}.process-amount span{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:#718078;font-size:10px;font-weight:700;pointer-events:none}.process-amount input{width:100px;border:1px solid #e1e9e3;border-radius:8px;background:#fff;padding:7px 7px 7px 29px;color:#21372a;font-size:11px;font-weight:700;outline:none;transition:border-color .18s,box-shadow .18s}.process-amount input:focus{border-color:#79aa89;box-shadow:0 0 0 3px #dceddf}.process-revenue button{border:1px solid #d5e7d9;border-radius:8px;background:#eef7f0;color:#286a45;padding:7px 8px;font-size:10px;font-weight:800;white-space:nowrap;transition:transform .16s,background .16s}.process-revenue button:hover{background:#deefe2;transform:translateY(-1px)}.no-revenue{color:#a4aea7;font-size:11px}
+    .finance-modal{width:min(460px,100%)}.finance-modal .formgrid{grid-template-columns:1fr 1fr}.finance-modal .field.full{grid-column:1/-1}.amount-wrap{position:relative}.amount-wrap span{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:11px;color:#809087;font-weight:700}.amount-wrap input{width:100%;padding-left:37px!important}.finance-delete{margin-right:auto;color:#a84e45;border-color:#efd7d3}
+    @keyframes chart-draw{to{stroke-dashoffset:0}}
+    @media(max-width:950px){.finance-body{grid-template-columns:minmax(0,1.4fr) minmax(220px,.8fr)}.finance-kpis{grid-template-columns:1.1fr 1fr 1fr}}
+    @media(max-width:650px){.finance-panel{padding:17px 13px;margin:17px 0 19px;border-radius:15px}.finance-head{display:grid;gap:14px}.finance-head h2{font-size:18px}.finance-controls{justify-content:space-between}.period-switch{flex:1}.period-switch button{flex:1;padding:7px 5px}.finance-add{font-size:10px;padding:9px 10px}.finance-kpis{gap:7px;grid-template-columns:1fr 1fr}.finance-kpi{padding:11px 10px}.finance-kpi.primary-kpi{grid-column:1/-1}.finance-kpi strong{font-size:16px}.finance-kpi.primary-kpi strong{font-size:22px}.finance-body{grid-template-columns:1fr}.chart-card{padding:14px 11px 12px}.chart-wrap{height:205px}.recent-card{min-height:unset;padding:14px}.finance-modal .formgrid{grid-template-columns:1fr}.finance-modal .field.full{grid-column:auto}.revenue-cell{grid-column:1/-1;grid-row:4;padding-top:7px}.date{grid-column:1;grid-row:3}.note-cell{grid-column:1/-1;grid-row:5;padding-top:6px}.actions{grid-column:2;grid-row:6;justify-content:flex-end}.process-revenue{max-width:100%}}
+    @media(prefers-reduced-motion:reduce){.chart-line{animation:none;stroke-dasharray:none;stroke-dashoffset:0}}
   </style>
 </head>
-<body class="bg-slate-100 dark:bg-darkbg-950 text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col transition-colors duration-300">
-
-  <!-- TOPBAR -->
-  <header class="bg-white/90 dark:bg-darkbg-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-40 transition-colors">
-    <div class="max-w-[1550px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="p-2.5 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl shadow-lg shadow-blue-500/25">
-          <i data-lucide="layers" class="w-5 h-5"></i>
-        </div>
-        <div>
-          <h1 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white leading-tight">CRM Pipeline Industrial</h1>
-          <p class="text-xs text-slate-500 dark:text-slate-400">Classificação de Leads & Painel de Faturamento</p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-2.5">
-        <button onclick="toggleDarkMode()" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-darkbg-800 text-slate-600 dark:text-amber-400 hover:scale-105 transition">
-          <i id="theme-icon" data-lucide="moon" class="w-4 h-4"></i>
-        </button>
-        <button onclick="abrirModalNovoLead()" class="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-md shadow-blue-500/20 active:scale-95 transition">
-          <i data-lucide="user-plus" class="w-4 h-4"></i> Novo Lead
-        </button>
-        <button onclick="exportarDados()" title="Backup dos Dados em JSON" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-darkbg-800 rounded-xl border border-slate-200 dark:border-slate-700 transition">
-          <i data-lucide="download" class="w-4 h-4"></i>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- CONTEÚDO PRINCIPAL -->
-  <main class="max-w-[1550px] mx-auto px-4 sm:px-6 py-6 flex-1 w-full space-y-6">
-
-    <!-- KPI CARDS -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="card-transition bg-white dark:bg-darkbg-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:-translate-y-0.5">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Receita Total</span>
-          <div class="p-2 bg-emerald-500/10 text-emerald-500 rounded-xl"><i data-lucide="badge-dollar-sign" class="w-5 h-5"></i></div>
-        </div>
-        <h3 id="kpi-receita" class="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-2">R$ 0,00</h3>
-        <p class="text-[11px] text-slate-400 mt-1 flex items-center gap-1"><i data-lucide="info" class="w-3 h-3"></i> Calculado das vendas fechadas</p>
-      </div>
-
-      <div class="card-transition bg-white dark:bg-darkbg-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:-translate-y-0.5">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Vendas Fechadas</span>
-          <div class="p-2 bg-blue-500/10 text-blue-500 rounded-xl"><i data-lucide="check-check" class="w-5 h-5"></i></div>
-        </div>
-        <h3 id="kpi-fechados" class="text-2xl font-bold text-slate-900 dark:text-white mt-2">0</h3>
-        <p class="text-[11px] text-slate-400 mt-1">Negócios convertidos</p>
-      </div>
-
-      <div class="card-transition bg-white dark:bg-darkbg-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:-translate-y-0.5">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Leads Ativos / Aberto</span>
-          <div class="p-2 bg-amber-500/10 text-amber-500 rounded-xl"><i data-lucide="clock" class="w-5 h-5"></i></div>
-        </div>
-        <h3 id="kpi-abertos" class="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-2">0</h3>
-        <p class="text-[11px] text-slate-400 mt-1">Em negociação / cotação</p>
-      </div>
-
-      <div class="card-transition bg-white dark:bg-darkbg-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:-translate-y-0.5">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Sem Sucesso (Isolados)</span>
-          <div class="p-2 bg-rose-500/10 text-rose-500 rounded-xl"><i data-lucide="archive-x" class="w-5 h-5"></i></div>
-        </div>
-        <h3 id="kpi-perdidos" class="text-2xl font-bold text-rose-600 dark:text-rose-400 mt-2">0</h3>
-        <p class="text-[11px] text-slate-400 mt-1">Fora da tela de trabalho</p>
-      </div>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand"><div class="brandmark">O</div><div class="brandtext"><strong>Oficina CRM</strong><small>Relacionamento comercial</small></div></div>
+    <div><div class="navtitle">Workspace</div><nav class="nav"><button class="active" data-view="all"><span class="ico">▦</span><span class="label">Visão geral</span></button><button data-view="Prospectado"><span class="ico">◎</span><span class="label">Prospectados</span></button><button data-view="quotes"><span class="ico">↗</span><span class="label">Orçamentos</span></button><button data-view="Fechado"><span class="ico">✓</span><span class="label">Fechados</span></button></nav></div>
+    <div class="side-bottom"><span class="local-dot"></span><span id="storageHint">Seus dados ficam salvos neste navegador.</span><br>Use “Backup” para criar uma cópia de segurança.</div>
+  </aside>
+  <main>
+    <header class="topbar"><div><div class="eyebrow" id="today"></div><h1>Seus leads</h1></div><div class="top-actions"><span class="cloud-status" id="cloudStatus">● Só neste dispositivo</span><button class="btn" id="cloudBtn" title="Configurar sincronização">☁ Nuvem</button><button class="btn export" id="exportBtn">⇩ Backup</button><button class="btn import" id="importBtn">↥ Restaurar</button><input id="importFile" type="file" accept="application/json,.json" hidden><button class="btn primary" id="addBtn">＋ Novo lead</button></div></header>
+    <section class="welcome"><div><h2>Relacionamentos que viram negócios.</h2><p>Organize seus contatos do WhatsApp, acompanhe os orçamentos e anote o próximo passo.</p></div><span class="pill">● Acesso protegido</span></section>
+    <section class="stats" id="stats"></section>
+    <section class="finance-panel" id="financePanel" aria-labelledby="financeTitle">
+      <div class="finance-head"><div class="finance-title"><span class="finance-icon" aria-hidden="true">↗</span><div><div class="finance-kicker">Financeiro</div><h2 id="financeTitle">Receita registrada</h2><p>Registre entradas recebidas e acompanhe a evolução.</p></div></div><div class="finance-controls"><div class="period-switch" role="group" aria-label="Período do gráfico"><button type="button" class="active" data-revenue-period="30d">30 dias</button><button type="button" data-revenue-period="90d">90 dias</button><button type="button" data-revenue-period="12m">12 meses</button></div><button type="button" class="btn finance-add" id="addRevenueBtn">＋ Adicionar receita</button></div></div>
+      <div class="finance-kpis"><article class="finance-kpi primary-kpi"><span id="periodRevenueTitle">Receita nos últimos 30 dias</span><strong id="periodRevenue">R$ 0,00</strong><small id="periodRevenueHint">Somente lançamentos adicionados manualmente</small></article><article class="finance-kpi"><span>Receita neste mês</span><strong id="monthRevenue">R$ 0,00</strong><small id="monthRevenueHint">0 lançamentos</small></article><article class="finance-kpi"><span>Total lançado</span><strong id="allRevenue">R$ 0,00</strong><small id="allRevenueHint">0 lançamentos</small></article></div>
+      <div class="finance-body"><article class="finance-card chart-card"><div class="finance-card-head"><div><h3>Receita ao longo do tempo</h3><p>Passe o cursor ou foque um ponto para ver o valor.</p></div><span class="chart-total" id="chartPeriodTotal">R$ 0,00</span></div><div class="chart-wrap" id="financeChartWrap"><svg id="financeChart" class="chart-svg" viewBox="0 0 800 280" preserveAspectRatio="none" role="img" aria-label="Gráfico de receita registrada"></svg><div class="chart-tooltip" id="financeTooltip" role="status"></div><div class="chart-empty" id="chartEmpty"><strong>Nenhuma receita neste período</strong>Adicione uma entrada para começar a acompanhar.</div></div><div class="chart-labels" id="chartLabels"></div></article><article class="finance-card recent-card"><div class="finance-card-head"><div><h3>Lançamentos recentes</h3><p>Entradas registradas manualmente</p></div></div><div class="recent-list" id="recentRevenueList"></div><div class="finance-footnote">O gráfico considera a data de cada lançamento.</div></article></div>
     </section>
-
-    <!-- PAINEL FINANCEIRO -->
-    <section class="bg-white dark:bg-darkbg-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 gap-4">
-        <div>
-          <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-500"></i> Faturamento por Negócio Fechado
-          </h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400">Valores alterados na tabela atualizam o gráfico e os relatórios automaticamente.</p>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <div class="bg-slate-100 dark:bg-darkbg-800 p-1 rounded-xl flex text-xs">
-            <button onclick="mudarTipoGrafico('bar')" id="btn-chart-bar" class="px-3 py-1 rounded-lg font-medium bg-white dark:bg-slate-700 shadow-sm text-slate-800 dark:text-white transition">Barras</button>
-            <button onclick="mudarTipoGrafico('line')" id="btn-chart-line" class="px-3 py-1 rounded-lg font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 transition">Linhas</button>
-          </div>
-          <button onclick="adicionarReceitaManual()" class="inline-flex items-center gap-1.5 text-xs font-semibold bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-xl border border-blue-200 dark:border-blue-800 transition">
-            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Lançar Receita Manual
-          </button>
-        </div>
-      </div>
-
-      <div class="mt-4 relative h-72 w-full">
-        <canvas id="receitaChart"></canvas>
-      </div>
+    <section class="board">
+      <div class="boardhead"><div><h2>Carteira de leads</h2><p>Gerencie etapas e acompanhe cada conversa.</p></div><div class="boardtools"><label class="search"><span>⌕</span><input id="search" placeholder="Buscar empresa ou cidade…" aria-label="Buscar"></label><select class="filter" id="stageFilter" aria-label="Filtrar por etapa"><option value="all">Todas as etapas</option></select></div></div>
+      <div class="tabs" id="tabs"><button class="tab active" data-tab="all">Todos <em id="count-all">0</em></button><button class="tab" data-tab="Prospectado">Prospectados <em id="count-prospect">0</em></button><button class="tab" data-tab="quotes">Orçamentos em andamento <em id="count-quotes">0</em></button><button class="tab" data-tab="Aguardando retorno">Aguardando retorno <em id="count-waiting">0</em></button><button class="tab" data-tab="Fechado">Fechados <em id="count-closed">0</em></button></div>
+      <div class="tablewrap"><table><thead><tr><th>Empresa / contato</th><th>Receita do processo fechado</th><th>Localização</th><th>Etapa</th><th>Último registro</th><th>Observação</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+      <div class="footer"><span id="resultCount">0 leads</span><span>Atualizado automaticamente neste dispositivo</span></div>
     </section>
-
-    <!-- BARRA DE CONTROLE: ABAS E BUSCA -->
-    <section class="space-y-4">
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <div class="flex bg-slate-200/80 dark:bg-darkbg-800 p-1 rounded-xl text-xs sm:text-sm font-semibold">
-          <button id="tab-ativos" onclick="mudarAba('ativos')" class="px-4 py-2 rounded-lg transition bg-white dark:bg-darkbg-900 text-slate-900 dark:text-white shadow-sm">
-            🔥 Leads Ativos
-          </button>
-          <button id="tab-fechados" onclick="mudarAba('fechados')" class="px-4 py-2 rounded-lg transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
-            ✅ Fechados (Receitas)
-          </button>
-          <button id="tab-arquivados" onclick="mudarAba('arquivados')" class="px-4 py-2 rounded-lg transition text-rose-600 dark:text-rose-400 hover:text-rose-700 flex items-center gap-1.5">
-            <i data-lucide="archive" class="w-3.5 h-3.5"></i> Sem Sucesso (Isolados)
-          </button>
-        </div>
-
-        <div class="relative w-full md:w-80">
-          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400"></i>
-          <input type="text" id="campo-busca" oninput="renderizarTabela()" placeholder="Filtrar por nome, cidade ou anotação..." class="w-full pl-9 pr-4 py-2 text-xs sm:text-sm bg-white dark:bg-darkbg-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition text-slate-900 dark:text-white" />
-        </div>
-      </div>
-
-      <!-- TABELA -->
-      <div class="bg-white dark:bg-darkbg-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead class="bg-slate-50/80 dark:bg-darkbg-800/60 text-slate-500 dark:text-slate-400 font-bold text-[11px] uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th class="px-4 py-3.5 min-w-[200px]">Empresa / Cliente</th>
-                <th class="px-4 py-3.5 min-w-[150px]">WhatsApp & Contato</th>
-                <th class="px-4 py-3.5 min-w-[130px]">Segmento</th>
-                <th class="px-4 py-3.5 min-w-[170px]">Status do Funil</th>
-                <th class="px-4 py-3.5 min-w-[180px]">Receita Gerada (R$)</th>
-                <th class="px-4 py-3.5 min-w-[340px]">Observações Detalhadas</th>
-                <th class="px-4 py-3.5 text-center w-16">Ações</th>
-              </tr>
-            </thead>
-            <tbody id="tabela-leads" class="divide-y divide-slate-100 dark:divide-slate-800 text-xs sm:text-sm">
-            </tbody>
-          </table>
-        </div>
-        <div id="empty-state" class="hidden p-12 text-center text-slate-400">
-          <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-3 text-slate-300 dark:text-slate-600"></i>
-          <p class="font-medium">Nenhum registro encontrado nesta categoria.</p>
-        </div>
-      </div>
-    </section>
-
   </main>
+</div>
+<div class="toast" id="toast"></div>
+<div class="modalback" id="modalback"><form class="modal" id="leadForm"><div class="modalhead"><div><h2 id="modalTitle">Novo lead</h2><p>Registre os dados e o próximo passo comercial.</p></div><button type="button" class="close" id="closeModal" aria-label="Fechar">×</button></div><input type="hidden" id="leadId"><div class="formgrid"><div class="field full"><label for="company">Empresa</label><input id="company" required placeholder="Nome da empresa"></div><div class="field"><label for="category">Categoria</label><input id="category" placeholder="Ex.: Metalúrgica"></div><div class="field"><label for="city">Cidade / UF</label><input id="city" placeholder="Cidade, SP"></div><div class="field"><label for="phone">Telefone</label><input id="phone" placeholder="(11) 99999-9999"></div><div class="field"><label for="stage">Etapa</label><select id="stage"></select></div><div class="field full"><label for="notes">Observações</label><textarea id="notes" placeholder="Histórico da conversa, necessidade, próximo contato…"></textarea></div></div><div class="modalfoot"><button type="button" class="btn delete hidden" id="deleteBtn">Excluir lead</button><button type="button" class="btn" id="cancelBtn">Cancelar</button><button class="btn primary" type="submit">Salvar lead</button></div></form></div>
+<div class="modalback" id="revenueModal"><form class="modal finance-modal" id="revenueForm"><div class="modalhead"><div><h2 id="revenueModalTitle">Adicionar receita</h2><p>Registre uma entrada recebida.</p></div><button type="button" class="close" id="revenueClose" aria-label="Fechar">×</button></div><input type="hidden" id="revenueId"><div class="formgrid"><div class="field full"><label for="revenueDescription">Descrição</label><input id="revenueDescription" required maxlength="120" placeholder="Ex.: Serviço ou venda recebida"></div><div class="field"><label for="revenueAmount">Valor recebido</label><div class="amount-wrap"><span>R$</span><input id="revenueAmount" type="number" inputmode="decimal" min="0.01" step="0.01" required placeholder="0,00"></div></div><div class="field"><label for="revenueDate">Data do recebimento</label><input id="revenueDate" type="date" required></div><div class="field full"><label for="revenueLead">Lead relacionado (opcional)</label><select id="revenueLead"><option value="">Nenhum lead</option></select></div></div><div class="modalfoot"><button type="button" class="btn finance-delete hidden" id="deleteRevenueBtn">Excluir lançamento</button><button type="button" class="btn" id="cancelRevenueBtn">Cancelar</button><button class="btn primary" type="submit">Salvar receita</button></div></form></div>
+<div class="modalback" id="cloudModal"><form class="modal" id="cloudForm"><div class="modalhead"><div><h2 id="cloudTitle">Sincronização entre notebooks</h2><p id="cloudDescription">Use o mesmo código compartilhado nos dois notebooks, sem e-mail nem senha.</p></div><button type="button" class="close" id="cloudClose" aria-label="Fechar">×</button></div><div class="formgrid" id="cloudLoginFields"><div class="field full"><label for="accessCode">Código de acesso compartilhado</label><input id="accessCode" type="password" autocomplete="current-password" minlength="20" required placeholder="Cole o código compartilhado"></div></div><div class="cloud-connected hidden" id="cloudConnectedInfo"></div><div class="modalfoot"><button type="button" class="btn" id="cloudDisconnect">Desconectar</button><button type="submit" class="btn primary" id="cloudConnect">Conectar</button></div></form></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const stages=['Prospectado','Orçamento a enviar','Orçamento enviado','Aguardando retorno','Fechado','Sem sucesso'];
+const seed=[];
+let leads=[];
+try{const saved=JSON.parse(localStorage.getItem('oficina-crm-leads'));leads=Array.isArray(saved)?saved:seed}catch{leads=seed}
+leads=leads.map((x,i)=>({id:String(x.id??i+1),company:String(x.company||'Lead sem nome'),category:String(x.category||''),city:String(x.city||''),phone:String(x.phone||''),whatsapp:String(x.whatsapp||''),stage:stages.includes(x.stage)?x.stage:'Prospectado',note:String(x.note||''),date:String(x.date||''),estimate:String(x.estimate||''),lastActivity:String(x.lastActivity||'')}));
+let activeTab='all',query='',filter='all',client=null,accessCode='',cloudConnected=false,cloudLoading=false,cloudPollTimer=null;
+const rows=document.getElementById('rows'), modal=document.getElementById('modalback'), cloudModal=document.getElementById('cloudModal');
+const storageKey='oficina-crm-leads',configKey='oficina-crm-supabase',disabledKey='oficina-crm-cloud-disabled',codeKey='oficina-crm-access-code';
+const revenueStorageKey='oficina-crm-revenues',revenuePrefix='__crm_finance__:';
+let revenues=[],revenuePeriod='30d';
+try{const savedRevenues=JSON.parse(localStorage.getItem(revenueStorageKey)||'[]');revenues=Array.isArray(savedRevenues)?savedRevenues.map(normalizeRevenue).filter(Boolean):[]}catch{revenues=[]}
+const defaultCloudConfig={url:'https://vmbdijmzpzkvovinchas.supabase.co',key:'sb_publishable_Sp5Vcvjuij6ec004Ki8DGw_eEZuL_Zc'};
+const pendingCloudKey='oficina-crm-pending-writes';
+let pendingCloudWrites=[];
+try{const saved=JSON.parse(localStorage.getItem(pendingCloudKey)||'[]');if(Array.isArray(saved))pendingCloudWrites=saved}catch{}
+let cloudWriteVersion=0,cloudFlush=null,cloudFirstRead=true;
 
-  <!-- MODAL DE OBSERVAÇÃO EXPANDIDA -->
-  <div id="modal-obs" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-darkbg-900 rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
-      <div class="flex items-center justify-between border-b pb-3 dark:border-slate-800">
-        <h3 id="modal-obs-titulo" class="font-bold text-slate-900 dark:text-white text-base">Observação do Lead</h3>
-        <button onclick="fecharModalObs()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1 rounded-lg">✕</button>
-      </div>
-      <textarea id="modal-obs-texto" rows="6" class="w-full text-sm p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-darkbg-800 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-      <div class="flex justify-end gap-2">
-        <button onclick="fecharModalObs()" class="px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-darkbg-800">Cancelar</button>
-        <button onclick="salvarModalObs()" class="px-4 py-2 text-xs font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 shadow-md">Salvar Alterações</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // DADOS INICIAIS COMPLETOS (Foto 1 + Foto 2)
-    const leadsIniciais = [
-      // FOTO 1
-      { id: 1, empresa: "REINERT - SOLUÇÕES EM SOLDA", estimativa: "ENC26108", produto: "Maquinário", cidade: "Blumenau", uf: "SC", fone: "47999990001", status: "Fechado", valor: 14500, obs: "Fechado. Solicitante: Daniel. Entrada de 50%, aguardando envio da transportadora.", data: "2026-09-03" },
-      { id: 2, empresa: "SMART REUSE LTDA", estimativa: "ENC26111", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Sem sucesso", valor: 0, obs: "Enviado - Sem sucesso. Solicitante: Daniel. Retornar no 1º trimestre de 2027.", data: "2026-09-16" },
-      { id: 3, empresa: "SILVA E CHAVES INDUSTRIA E COMÉRCIO LTDA", estimativa: "ENC26112", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Aguardando Retorno", valor: 0, obs: "Enviado - Aguardando Retorno. Solicitante: Daniel.", data: "2026-10-07" },
-      { id: 4, empresa: "J. FERNANDES", estimativa: "ENC26113", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Aguardando Retorno", valor: 0, obs: "Enviado - Aguardando Retorno. Solicitante: Daniel.", data: "2026-10-13" },
-      { id: 5, empresa: "TSB METALÚRGICA", estimativa: "ENC26114", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Fechado", valor: 28000, obs: "Fechado. Solicitante: Daniel. Contrato assinado.", data: "2026-10-14" },
-      { id: 6, empresa: "ROCHA EQUIPAMENTOS (Cotação 1)", estimativa: "ENC26116", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Aguardando Retorno", valor: 0, obs: "Enviado - Aguardando Retorno. Solicitante: Daniel.", data: "2026-10-19" },
-      { id: 7, empresa: "ROCHA EQUIPAMENTOS (Cotação 2)", estimativa: "ENC26117", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Aguardando Retorno", valor: 0, obs: "Enviado - Aguardando Retorno. Solicitante: Daniel.", data: "2026-10-19" },
-      { id: 8, empresa: "JM MECÂNICA", estimativa: "ENC26118", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Aguardando Retorno", valor: 0, obs: "Enviado - Aguardando Retorno. Solicitante: Daniel.", data: "2026-10-20" },
-      { id: 9, empresa: "TORNEADORA E MECANICA TALISMA", estimativa: "ENC26119", produto: "Maquinário", cidade: "", uf: "", fone: "", status: "Fechado", valor: 9200, obs: "Fechado. Solicitante: Daniel. Pagamento realizado à vista.", data: "2026-10-27" },
-      { id: 10, empresa: "TORNOCAR (Tornocar Tornearia)", estimativa: "ENC26120", produto: "Tornearia", cidade: "Dourados", uf: "MS", fone: "556734247671", status: "A enviar", valor: 0, obs: "A enviar. Solicitante: Daniel. Passar proposta até as 15h.", data: "2026-10-29" },
-      // FOTO 2
-      { id: 11, empresa: "Rex Helicoides", estimativa: "WHATSAPP", produto: "Fabricante", cidade: "Ibiraci", uf: "MG", fone: "5535999910614", status: "Orçamento Enviado", valor: 0, obs: "Interesse em espirais de 300mm. Pediram desconto para 3 unidades.", data: "2026-10-28" },
-      { id: 12, empresa: "Helicoides Brasil", estimativa: "WHATSAPP", produto: "Metalúrgica", cidade: "Goiânia", uf: "GO", fone: "5564993386203", status: "Orçamento Enviado", valor: 0, obs: "Primeiro contato WhatsApp pelo encarregado de produção.", data: "2026-10-28" },
-      { id: 13, empresa: "Torno e Helicoides São Jorge", estimativa: "WHATSAPP", produto: "Tornearia", cidade: "Ivaiporã", uf: "PR", fone: "554334721302", status: "Orçamento Enviado", valor: 0, obs: "Contato via WhatsApp / Fixo com WhatsApp habilitado.", data: "2026-10-29" },
-      { id: 14, empresa: "Demakine Equipamentos Agroindustriais", estimativa: "WHATSAPP", produto: "Fabricante", cidade: "Limeira", uf: "SP", fone: "551930339397", status: "A enviar", valor: 0, obs: "Solicitou cotação de maquinário completo com esteira.", data: "2026-10-29" },
-      { id: 15, empresa: "Casarini Equipamentos Industriais Ltda", estimativa: "WHATSAPP", produto: "Metalúrgica", cidade: "São Paulo", uf: "SP", fone: "551139343777", status: "A enviar", valor: 0, obs: "Prospecção ativa via lista industrial.", data: "2026-10-29" },
-      { id: 16, empresa: "Referencial Projetos Ltda", estimativa: "WHATSAPP", produto: "Metalúrgica", cidade: "Curitiba", uf: "PR", fone: "554130798128", status: "A enviar", valor: 0, obs: "Projetos e montagens metálicas industriais.", data: "2026-10-29" },
-      { id: 17, empresa: "BRX Sistemas Industria e Comercio Ltda.", estimativa: "WHATSAPP", produto: "Equipamentos", cidade: "Jundiaí", uf: "SP", fone: "551142300916", status: "A enviar", valor: 0, obs: "Fabricante de sistemas e maquinários industriais.", data: "2026-10-29" },
-      { id: 18, empresa: "Tornearia Nova Horizonte | Torno e Solda", estimativa: "WHATSAPP", produto: "Tornearia", cidade: "Luís Eduardo Magalhães", uf: "BA", fone: "5577999716634", status: "A enviar", valor: 0, obs: "Torno, solda e recuperação de peças para agro e indústria.", data: "2026-10-29" },
-      { id: 19, empresa: "Mecânica Industrial Nardeli - Usinagem", estimativa: "WHATSAPP", produto: "Serviço de Usinagem", cidade: "Ponta Grossa", uf: "PR", fone: "554232361776", status: "A enviar", valor: 0, obs: "Usinagem de precisão e recuperação de componentes.", data: "2026-10-29" },
-      { id: 20, empresa: "Calderol Grupack", estimativa: "WHATSAPP", produto: "Fabricante", cidade: "Diadema", uf: "SP", fone: "551123118372", status: "A enviar", valor: 0, obs: "Caldeiraria, estruturas metálicas e equipamentos.", data: "2026-10-29" },
-      { id: 21, empresa: "K-zin Soluções Industriais (Grupo C+K)", estimativa: "WHATSAPP", produto: "Fabricante", cidade: "Diadema", uf: "SP", fone: "551143425752", status: "A enviar", valor: 0, obs: "Soluções e montagens industriais em Diadema/SP.", data: "2026-10-29" },
-      { id: 22, empresa: "MG Metalúrgica Gravino", estimativa: "WHATSAPP", produto: "Metalúrgica", cidade: "Cotia", uf: "SP", fone: "551146122851", status: "A enviar", valor: 0, obs: "Corte, dobra e usinagem para linha de produção.", data: "2026-10-29" },
-      { id: 23, empresa: "Mared Equipamentos Agroindustriais", estimativa: "WHATSAPP", produto: "Metalúrgica", cidade: "Londrina", uf: "PR", fone: "554333270938", status: "A enviar", valor: 0, obs: "Equipamentos para armazenagem e processamento agroindustrial.", data: "2026-10-29" },
-      { id: 24, empresa: "Agriaço", estimativa: "WHATSAPP", produto: "Fabricante", cidade: "Condor", uf: "RS", fone: "555531800069", status: "A enviar", valor: 0, obs: "Componentes agropecuários e peças em aço.", data: "2026-10-29" }
-    ];
-
-    // Atualizado para v3 para carregar a nova lista completa no navegador
-    let leads = JSON.parse(localStorage.getItem('crm_leads_data_v3')) || leadsIniciais;
-    let abaAtual = 'ativos';
-    let chartInstance = null;
-    let tipoGraficoAtual = 'bar';
-    let idLeadEditandoObs = null;
-
-    function initDarkMode() {
-      const isDark = localStorage.getItem('crm_theme') === 'dark';
-      document.documentElement.classList.toggle('dark', isDark);
-      atualizarIconeTema(isDark);
-    }
-
-    function toggleDarkMode() {
-      const isDark = document.documentElement.classList.toggle('dark');
-      localStorage.setItem('crm_theme', isDark ? 'dark' : 'light');
-      atualizarIconeTema(isDark);
-      atualizarDashboard();
-    }
-
-    function atualizarIconeTema(isDark) {
-      const icon = document.getElementById('theme-icon');
-      if (icon) {
-        icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
-        lucide.createIcons();
-      }
-    }
-
-    function salvarDados() {
-      localStorage.setItem('crm_leads_data_v3', JSON.stringify(leads));
-      atualizarDashboard();
-    }
-
-    function mudarAba(aba) {
-      abaAtual = aba;
-      ['ativos', 'fechados', 'arquivados'].forEach(a => {
-        const el = document.getElementById(`tab-${a}`);
-        if(a === aba) {
-          el.className = "px-4 py-2 rounded-lg transition bg-white dark:bg-darkbg-900 text-slate-900 dark:text-white shadow-sm font-semibold";
-        } else {
-          el.className = "px-4 py-2 rounded-lg transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
-        }
-      });
-      renderizarTabela();
-    }
-
-    function renderizarTabela() {
-      const tbody = document.getElementById('tabela-leads');
-      const busca = document.getElementById('campo-busca').value.toLowerCase();
-      tbody.innerHTML = '';
-
-      let filtrados = leads.filter(l => {
-        const match = (l.empresa + l.produto + (l.cidade || '') + (l.obs || '')).toLowerCase().includes(busca);
-        if (!match) return false;
-
-        if (abaAtual === 'arquivados') return l.status === 'Sem sucesso';
-        if (abaAtual === 'fechados') return l.status === 'Fechado';
-        return l.status !== 'Sem sucesso' && l.status !== 'Fechado';
-      });
-
-      document.getElementById('empty-state').classList.toggle('hidden', filtrados.length > 0);
-
-      filtrados.forEach(lead => {
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-50/80 dark:hover:bg-darkbg-800/40 transition border-b border-slate-100 dark:border-slate-800";
-
-        const cleanPhone = lead.fone ? lead.fone.replace(/\D/g, '') : '';
-        const whatsBtn = cleanPhone ? `
-          <a href="https://wa.me/${cleanPhone}?text=Ol%C3%A1%2C%20gostaria%20de%20falar%20sobre%20sua%20cota%C3%A7%C3%A3o." target="_blank" class="inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 font-medium transition">
-            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Iniciar Chat
-          </a>
-        ` : '<span class="text-xs text-slate-400">Sem WhatsApp</span>';
-
-        tr.innerHTML = `
-          <td class="px-4 py-3">
-            <div class="font-bold text-slate-900 dark:text-white">${lead.empresa}</div>
-            <div class="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
-              <span class="font-mono bg-slate-100 dark:bg-darkbg-800 px-1 rounded">${lead.estimativa || 'S/N'}</span>
-              <span>•</span>
-              <span>${lead.cidade ? lead.cidade + '/' + lead.uf : (lead.uf ? lead.uf : 'Brasil')}</span>
-            </div>
-          </td>
-
-          <td class="px-4 py-3">
-            <div class="text-xs font-mono text-slate-600 dark:text-slate-300 mb-1">${lead.fone || '-'}</div>
-            ${whatsBtn}
-          </td>
-
-          <td class="px-4 py-3">
-            <span class="inline-block bg-slate-100 dark:bg-darkbg-800 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg text-xs font-medium">
-              ${lead.produto}
-            </span>
-          </td>
-
-          <td class="px-4 py-3">
-            <select onchange="atualizarStatus(${lead.id}, this.value)" class="text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 bg-white dark:bg-darkbg-800 text-slate-800 dark:text-slate-200 shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer">
-              <option value="A enviar" ${lead.status === 'A enviar' ? 'selected' : ''}>⏳ A enviar</option>
-              <option value="Orçamento Enviado" ${lead.status === 'Orçamento Enviado' ? 'selected' : ''}>📨 Orçamento Enviado</option>
-              <option value="Aguardando Retorno" ${lead.status === 'Aguardando Retorno' ? 'selected' : ''}>⌛ Aguardando Retorno</option>
-              <option value="Fechado" ${lead.status === 'Fechado' ? 'selected' : ''}>✅ Fechado (Receita)</option>
-              <option value="Sem sucesso" ${lead.status === 'Sem sucesso' ? 'selected' : ''}>❌ Sem sucesso</option>
-            </select>
-          </td>
-
-          <td class="px-4 py-3">
-            <div class="relative flex items-center">
-              <span class="absolute left-2.5 text-xs font-bold text-slate-400">R$</span>
-              <input type="number" step="0.01" value="${lead.valor > 0 ? lead.valor : ''}" placeholder="0,00"
-                onchange="atualizarValor(${lead.id}, this.value)"
-                class="w-32 pl-8 pr-7 py-1.5 text-xs font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-darkbg-800 text-slate-900 dark:text-white focus:bg-white dark:focus:bg-darkbg-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-              />
-              ${lead.valor > 0 ? `
-                <button onclick="retirarReceita(${lead.id})" title="Zerar receita" class="absolute right-2 text-slate-400 hover:text-rose-500 text-xs font-bold transition">✕</button>
-              ` : ''}
-            </div>
-          </td>
-
-          <td class="px-4 py-3">
-            <div class="flex items-start gap-2">
-              <textarea rows="2" placeholder="Escreva anotações, detalhes, valores..."
-                onchange="atualizarObs(${lead.id}, this.value)"
-                class="w-full text-xs p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-darkbg-800 text-slate-800 dark:text-slate-100 focus:bg-white dark:focus:bg-darkbg-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 resize-y transition"
-              >${lead.obs || ''}</textarea>
-              <button onclick="abrirModalObs(${lead.id})" title="Expandir texto" class="p-1.5 mt-1 text-slate-400 hover:text-blue-500 hover:bg-slate-100 dark:hover:bg-darkbg-800 rounded-lg transition">
-                <i data-lucide="maximize-2" class="w-4 h-4"></i>
-              </button>
-            </div>
-          </td>
-
-          <td class="px-4 py-3 text-center">
-            <button onclick="removerLead(${lead.id})" title="Excluir Registro" class="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition">
-              <i data-lucide="trash-2" class="w-4 h-4"></i>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      lucide.createIcons();
-    }
-
-    function abrirModalObs(id) {
-      idLeadEditandoObs = id;
-      const lead = leads.find(l => l.id === id);
-      if (!lead) return;
-      document.getElementById('modal-obs-titulo').innerText = `Observação: ${lead.empresa}`;
-      document.getElementById('modal-obs-texto').value = lead.obs || '';
-      document.getElementById('modal-obs').classList.remove('hidden');
-    }
-
-    function fecharModalObs() {
-      document.getElementById('modal-obs').classList.add('hidden');
-      idLeadEditandoObs = null;
-    }
-
-    function salvarModalObs() {
-      if (idLeadEditandoObs) {
-        const novoTexto = document.getElementById('modal-obs-texto').value;
-        atualizarObs(idLeadEditandoObs, novoTexto);
-        fecharModalObs();
-      }
-    }
-
-    function atualizarStatus(id, novoStatus) {
-      const item = leads.find(l => l.id === id);
-      if (item) {
-        item.status = novoStatus;
-        salvarDados();
-      }
-    }
-
-    function atualizarValor(id, novoValor) {
-      const item = leads.find(l => l.id === id);
-      if (item) {
-        item.valor = parseFloat(novoValor) || 0;
-        salvarDados();
-      }
-    }
-
-    function retirarReceita(id) {
-      const item = leads.find(l => l.id === id);
-      if (item) {
-        if(confirm(`Deseja zerar a receita de R$ ${item.valor.toLocaleString('pt-BR')} de "${item.empresa}"?`)) {
-          item.valor = 0;
-          salvarDados();
-        }
-      }
-    }
-
-    function atualizarObs(id, novaObs) {
-      const item = leads.find(l => l.id === id);
-      if (item) {
-        item.obs = novaObs;
-        salvarDados();
-      }
-    }
-
-    function removerLead(id) {
-      if (confirm("Tem certeza que deseja remover este lead?")) {
-        leads = leads.filter(l => l.id !== id);
-        salvarDados();
-      }
-    }
-
-    function adicionarReceitaManual() {
-      const empresa = prompt("Nome do Cliente ou Lançamento de Receita:");
-      if (!empresa) return;
-      const valorStr = prompt("Valor recebido (R$):", "5000");
-      const valor = parseFloat(valorStr) || 0;
-
-      leads.unshift({
-        id: Date.now(),
-        empresa: empresa,
-        estimativa: "RECEITA",
-        produto: "Avulso",
-        cidade: "",
-        uf: "",
-        fone: "",
-        status: "Fechado",
-        valor: valor,
-        obs: "Receita lançada manualmente no painel.",
-        data: new Date().toISOString().split('T')[0]
-      });
-      salvarDados();
-    }
-
-    function abrirModalNovoLead() {
-      const empresa = prompt("Nome da Empresa / Cliente:");
-      if (!empresa) return;
-      const fone = prompt("WhatsApp (com DDD, somente números):", "55");
-      const produto = prompt("Produto / Categoria:", "Maquinário");
-
-      leads.unshift({
-        id: Date.now(),
-        empresa: empresa,
-        estimativa: "ORÇAMENTO",
-        produto: produto || "Maquinário",
-        cidade: "",
-        uf: "",
-        fone: fone || "",
-        status: "Orçamento Enviado",
-        valor: 0,
-        obs: "",
-        data: new Date().toISOString().split('T')[0]
-      });
-      salvarDados();
-    }
-
-    function exportarDados() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(leads, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `crm_leads_backup_${new Date().toISOString().slice(0,10)}.json`);
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-    }
-
-    function mudarTipoGrafico(tipo) {
-      tipoGraficoAtual = tipo;
-      document.getElementById('btn-chart-bar').className = tipo === 'bar' 
-        ? "px-3 py-1 rounded-lg font-medium bg-white dark:bg-slate-700 shadow-sm text-slate-800 dark:text-white transition"
-        : "px-3 py-1 rounded-lg font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 transition";
-
-      document.getElementById('btn-chart-line').className = tipo === 'line' 
-        ? "px-3 py-1 rounded-lg font-medium bg-white dark:bg-slate-700 shadow-sm text-slate-800 dark:text-white transition"
-        : "px-3 py-1 rounded-lg font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 transition";
-
-      atualizarDashboard();
-    }
-
-    function atualizarDashboard() {
-      const fechados = leads.filter(l => l.status === 'Fechado' && (l.valor || 0) > 0);
-      const abertos = leads.filter(l => l.status !== 'Fechado' && l.status !== 'Sem sucesso');
-      const perdidos = leads.filter(l => l.status === 'Sem sucesso');
-
-      const receitaTotal = fechados.reduce((acc, curr) => acc + (Number(curr.valor) || 0), 0);
-
-      document.getElementById('kpi-receita').innerText = receitaTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-      document.getElementById('kpi-fechados').innerText = fechados.length;
-      document.getElementById('kpi-abertos').innerText = abertos.length;
-      document.getElementById('kpi-perdidos').innerText = perdidos.length;
-
-      renderizarGrafico(fechados);
-      renderizarTabela();
-    }
-
-    function renderizarGrafico(fechados) {
-      const ctx = document.getElementById('receitaChart').getContext('2d');
-      const isDark = document.documentElement.classList.contains('dark');
-
-      const labels = fechados.map(f => f.empresa.length > 15 ? f.empresa.substring(0, 15) + '...' : f.empresa);
-      const valores = fechados.map(f => f.valor || 0);
-
-      if (chartInstance) {
-        chartInstance.destroy();
-      }
-
-      const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-      gradient.addColorStop(0, 'rgba(59, 130, 246, 0.9)');
-      gradient.addColorStop(1, 'rgba(99, 102, 241, 0.4)');
-
-      chartInstance = new Chart(ctx, {
-        type: tipoGraficoAtual,
-        data: {
-          labels: labels.length ? labels : ['Sem receitas fechadas'],
-          datasets: [{
-            label: 'Receita (R$)',
-            data: valores.length ? valores : [0],
-            backgroundColor: tipoGraficoAtual === 'bar' ? gradient : 'rgba(59, 130, 246, 0.15)',
-            borderColor: '#3b82f6',
-            borderWidth: 2,
-            borderRadius: 8,
-            fill: true,
-            tension: 0.35,
-            pointBackgroundColor: '#2563eb',
-            pointRadius: 4,
-            pointHoverRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: {
-            duration: 1000,
-            easing: 'easeOutQuart'
-          },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: isDark ? '#1e293b' : '#0f172a',
-              titleColor: '#fff',
-              bodyColor: '#38bdf8',
-              padding: 12,
-              cornerRadius: 10,
-              displayColors: false,
-              callbacks: {
-                label: function(context) {
-                  return ' Receita: R$ ' + context.parsed.y.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-                }
-              }
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: { color: isDark ? 'rgba(51, 65, 85, 0.4)' : '#f1f5f9' },
-              ticks: {
-                color: isDark ? '#94a3b8' : '#64748b',
-                callback: (val) => 'R$ ' + val.toLocaleString('pt-BR')
-              }
-            },
-            x: {
-              grid: { display: false },
-              ticks: { color: isDark ? '#94a3b8' : '#64748b' }
-            }
-          }
-        }
-      });
-    }
-
-    window.onload = () => {
-      initDarkMode();
-      atualizarDashboard();
-    };
-  </script>
+function persistCloudWrites(){
+ try{localStorage.setItem(pendingCloudKey,JSON.stringify(pendingCloudWrites))}catch{}
+}
+function flushCloudWrites(){
+ if(cloudFlush)return cloudFlush;
+ if(!client||!accessCode||!pendingCloudWrites.length)return Promise.resolve();
+ const connection=client,code=accessCode;
+ cloudFlush=(async()=>{
+  while(pendingCloudWrites.length&&client===connection&&accessCode===code){
+   const entry=pendingCloudWrites[0];
+   const {error}=await connection.rpc(entry.method,{...entry.params,p_access_code:code});
+   if(error)throw error;
+   pendingCloudWrites.shift();
+   persistCloudWrites();
+  }
+ })().finally(()=>{cloudFlush=null});
+ return cloudFlush;
+}
+function queueCloudWrite(method,params){
+ pendingCloudWrites.push({method,params});
+ cloudWriteVersion++;
+ persistCloudWrites();
+ return flushCloudWrites();
+}
+function getCloudConfig(){try{return JSON.parse(localStorage.getItem(configKey)||'null')||defaultCloudConfig}catch{return defaultCloudConfig}}
+function persistLocal(){try{localStorage.setItem(storageKey,JSON.stringify(leads));return true}catch(err){toast('Não foi possível salvar: espaço do navegador cheio. Exporte um backup.');return false}}
+function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function initials(s){return s.split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()}
+function uuid(){return globalThis.crypto?.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(16).slice(2)}`}
+function normalizeRevenue(item){if(!item||typeof item!=='object')return null;const amount=Math.round(Number(item.amount));const date=String(item.date||'');const description=String(item.description||'').trim().slice(0,120);if(!description||!Number.isFinite(amount)||amount<1||!/^\d{4}-\d{2}-\d{2}$/.test(date))return null;return{id:String(item.id||uuid()),description,amount,date,leadId:String(item.leadId||'')}}
+function persistRevenues(){try{localStorage.setItem(revenueStorageKey,JSON.stringify(revenues));return true}catch{toast('Não foi possível salvar o financeiro neste navegador.');return false}}
+function formatBRL(cents){return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format((Number(cents)||0)/100)}
+function dateKey(date){const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),d=String(date.getDate()).padStart(2,'0');return`${y}-${m}-${d}`}
+function parseDateKey(value){const parts=String(value||'').split('-').map(Number);return parts.length===3?new Date(parts[0],parts[1]-1,parts[2]):new Date(NaN)}
+function displayDate(value,options={day:'numeric',month:'short'}){const d=parseDateKey(value);return Number.isNaN(d.getTime())?'':new Intl.DateTimeFormat('pt-BR',options).format(d)}
+function startOfWeek(date){const d=new Date(date.getFullYear(),date.getMonth(),date.getDate());d.setDate(d.getDate()-((d.getDay()+6)%7));return d}
+function remoteRevenueRow(item){return{id:revenuePrefix+item.id,company:'__OFICINA_CRM_FINANCE__',category:'CRM_FINANCE',city:'',phone:'',whatsapp:'',stage:'Fechado',note:JSON.stringify(item),date:item.date,estimate:'',lastActivity:item.date}}
+function isRemoteRevenue(row){return String(row?.id||'').startsWith(revenuePrefix)}
+function revenueFromRemote(row){try{return normalizeRevenue(JSON.parse(row.note||'{}'))}catch{return null}}
+async function saveRevenueRemote(item){if(!client||!accessCode)return;await queueCloudWrite('crm_save_lead',{p_lead:remoteRevenueRow(item)})}
+async function saveProcessRevenue(leadId){const lead=leads.find(l=>l.id===leadId);if(!lead||lead.stage!=='Fechado')return;const input=[...document.querySelectorAll('[data-process-revenue]')].find(el=>el.dataset.processRevenue===leadId);if(!input)return;const amount=Math.round(Number(input.value.replace(',','.'))*100);if(!Number.isFinite(amount)||amount<1){toast('Digite um valor de receita maior que zero.');input.focus();return}const id=processRevenueId(lead.id),previous=revenues.find(r=>r.id===id),item=normalizeRevenue({id,description:lead.company,amount,date:previous?.date||dateKey(new Date()),leadId:lead.id});if(previous)revenues=revenues.map(r=>r.id===id?item:r);else revenues.unshift(item);persistRevenues();render();if(client&&accessCode){try{await saveRevenueRemote(item);setCloudStatus('Sincronizado nos notebooks','online');toast('Receita adicionada ao gráfico e sincronizada')}catch{setCloudStatus('Falha ao sincronizar','error');toast('Receita entrou no gráfico deste aparelho; a nuvem falhou.')}}else toast('Receita adicionada ao gráfico neste aparelho')}
+function chartBuckets(){const now=new Date(),buckets=[];if(revenuePeriod==='30d'){for(let i=29;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);buckets.push({key:dateKey(d),label:displayDate(dateKey(d),{day:'numeric',month:'short'}),value:0})}for(const r of revenues){const b=buckets.find(x=>x.key===r.date);if(b)b.value+=r.amount}}
+ else if(revenuePeriod==='90d'){const thisWeek=startOfWeek(now);for(let i=12;i>=0;i--){const d=new Date(thisWeek);d.setDate(d.getDate()-7*i);buckets.push({key:dateKey(d),label:displayDate(dateKey(d),{day:'numeric',month:'short'}),value:0})}const index=new Map(buckets.map((b,i)=>[b.key,i]));for(const r of revenues){const d=parseDateKey(r.date),b=index.get(dateKey(startOfWeek(d)));if(b!==undefined)buckets[b].value+=r.amount}}
+ else{for(let i=11;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1),key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;buckets.push({key,label:new Intl.DateTimeFormat('pt-BR',{month:'short'}).format(d).replace('.',''),value:0})}const index=new Map(buckets.map((b,i)=>[b.key,i]));for(const r of revenues){const key=r.date.slice(0,7),b=index.get(key);if(b!==undefined)buckets[b].value+=r.amount}}
+ return buckets}
+function renderFinance(){const periodLabels={'30d':'últimos 30 dias','90d':'últimos 90 dias','12m':'últimos 12 meses'},buckets=chartBuckets(),periodTotal=buckets.reduce((sum,b)=>sum+b.value,0),now=new Date(),monthKey=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`,monthItems=revenues.filter(r=>r.date.startsWith(monthKey)),monthTotal=monthItems.reduce((sum,r)=>sum+r.amount,0),allTotal=revenues.reduce((sum,r)=>sum+r.amount,0);document.getElementById('periodRevenueTitle').textContent=`Receita nos ${periodLabels[revenuePeriod]}`;document.getElementById('periodRevenue').textContent=formatBRL(periodTotal);document.getElementById('periodRevenueHint').textContent=`${revenues.filter(r=>buckets.some(b=>revenuePeriod==='12m'?r.date.startsWith(b.key):revenuePeriod==='90d'?b.key<=dateKey(startOfWeek(parseDateKey(r.date)))&&dateKey(startOfWeek(parseDateKey(r.date)))<=buckets.at(-1)?.key:b.key===r.date)).length} lançamentos no período`;document.getElementById('monthRevenue').textContent=formatBRL(monthTotal);document.getElementById('monthRevenueHint').textContent=`${monthItems.length} ${monthItems.length===1?'lançamento':'lançamentos'}`;document.getElementById('allRevenue').textContent=formatBRL(allTotal);document.getElementById('allRevenueHint').textContent=`${revenues.length} ${revenues.length===1?'lançamento':'lançamentos'}`;document.getElementById('chartPeriodTotal').textContent=formatBRL(periodTotal);document.querySelectorAll('[data-revenue-period]').forEach(btn=>btn.classList.toggle('active',btn.dataset.revenuePeriod===revenuePeriod));
+ const svg=document.getElementById('financeChart'),tooltip=document.getElementById('financeTooltip'),empty=document.getElementById('chartEmpty'),labels=document.getElementById('chartLabels'),W=800,H=280,left=52,right=787,top=20,bottom=226,plotH=bottom-top,max=Math.max(...buckets.map(b=>b.value),0),scale=max?max*1.12:1;let grid='';for(let i=0;i<5;i++){const y=top+(plotH/4)*i,value=Math.round(scale*(4-i)/4);grid+=`<line class="chart-grid" x1="${left}" y1="${y}" x2="${right}" y2="${y}"/><text class="chart-axis" x="2" y="${y+3}">${value?new Intl.NumberFormat('pt-BR',{notation:'compact',maximumFractionDigits:1}).format(value/100):'R$ 0'}</text>`}
+ const pts=buckets.map((b,i)=>({x:left+(right-left)*(buckets.length===1?0.5:i/(buckets.length-1)),y:bottom-(b.value/scale)*plotH,bucket:b,index:i})),hasData=periodTotal>0;let path='';if(pts.length){path=pts.map((p,i)=>`${i?'L':'M'}${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ')}const area=pts.length?`${path} L${pts.at(-1).x.toFixed(1)} ${bottom} L${pts[0].x.toFixed(1)} ${bottom} Z`:'';const dots=hasData?pts.map(p=>`<g class="chart-point" data-point="${p.index}" tabindex="0" role="button" aria-label="${esc(p.bucket.label)}: ${esc(formatBRL(p.bucket.value))}"><circle class="outer" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="5.5"/><circle class="inner" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2"/></g>`).join(''):'';svg.innerHTML=`<defs><linearGradient id="financeArea" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#4ca975" stop-opacity=".28"/><stop offset="100%" stop-color="#4ca975" stop-opacity=".015"/></linearGradient></defs>${grid}${hasData?`<path class="chart-area" d="${area}"/><path class="chart-line" d="${path}"/>${dots}`:''}`;empty.classList.toggle('hidden',hasData);tooltip.style.display='none';const tickIdx=[0,Math.round((buckets.length-1)/4),Math.round((buckets.length-1)/2),Math.round(3*(buckets.length-1)/4),buckets.length-1];labels.innerHTML=tickIdx.map(i=>`<span>${esc(buckets[i]?.label||'')}</span>`).join('');
+ svg.querySelectorAll('.chart-point').forEach(node=>{const show=()=>{const p=pts[Number(node.dataset.point)],rect=document.getElementById('financeChartWrap').getBoundingClientRect();tooltip.innerHTML=`${esc(p.bucket.label)}<strong>${esc(formatBRL(p.bucket.value))}</strong>`;tooltip.style.left=`${Math.max(55,Math.min(rect.width-55,p.x/W*rect.width))}px`;tooltip.style.top=`${Math.max(42,p.y/H*rect.height)}px`;tooltip.style.display='block'};node.addEventListener('pointerenter',show);node.addEventListener('focus',show);node.addEventListener('pointerleave',()=>tooltip.style.display='none');node.addEventListener('blur',()=>tooltip.style.display='none')});
+ const recent=[...revenues].sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id)).slice(0,6),list=document.getElementById('recentRevenueList');list.innerHTML=recent.length?recent.map(r=>{const lead=leads.find(x=>x.id===r.leadId);return`<div class="revenue-row"><div><button class="revenue-edit" data-edit-revenue="${esc(r.id)}">${esc(r.description)}</button><div class="revenue-meta">${esc(displayDate(r.date,{day:'2-digit',month:'short',year:'numeric'}))}${lead?' · '+esc(lead.company):''}</div></div><div class="revenue-actions"><span class="revenue-value">${esc(formatBRL(r.amount))}</span><button class="revenue-remove" data-remove-revenue="${esc(r.id)}" aria-label="Excluir ${esc(r.description)}" title="Excluir lançamento">×</button></div></div>`}).join(''):'<div class="finance-empty"><strong>Nenhuma receita registrada</strong>Adicione uma entrada recebida para ver o gráfico e o resumo.</div>';document.querySelectorAll('[data-edit-revenue]').forEach(btn=>btn.onclick=()=>openRevenueModal(btn.dataset.editRevenue));document.querySelectorAll('[data-remove-revenue]').forEach(btn=>btn.onclick=()=>deleteRevenue(btn.dataset.removeRevenue));
+ const leadSelect=document.getElementById('revenueLead');if(leadSelect){const selected=leadSelect.value;leadSelect.innerHTML='<option value="">Nenhum lead</option>'+[...leads].sort((a,b)=>a.company.localeCompare(b.company,'pt-BR')).map(l=>`<option value="${esc(l.id)}">${esc(l.company)}</option>`).join('');if(leads.some(l=>l.id===selected))leadSelect.value=selected}}
+function openRevenueModal(id=''){const item=revenues.find(r=>r.id===id);document.getElementById('revenueForm').reset();document.getElementById('revenueId').value=item?.id||'';document.getElementById('revenueModalTitle').textContent=item?'Editar lançamento':'Adicionar receita';document.getElementById('revenueDescription').value=item?.description||'';document.getElementById('revenueAmount').value=item?(item.amount/100).toFixed(2):'';document.getElementById('revenueDate').value=item?.date||dateKey(new Date());document.getElementById('revenueLead').value=item?.leadId||'';document.getElementById('deleteRevenueBtn').classList.toggle('hidden',!item);document.getElementById('revenueModal').classList.add('open');document.getElementById('revenueDescription').focus()}
+async function deleteRevenue(id,closeModal=false){const item=revenues.find(r=>r.id===id);if(!item||!confirm(`Excluir a receita “${item.description}”?`))return false;if(client&&accessCode){const{error}=await client.rpc('crm_delete_lead',{p_access_code:accessCode,p_lead_id:revenuePrefix+id});if(error){setCloudStatus('Falha ao sincronizar','error');toast('Não foi possível excluir a receita da nuvem.');return false}}revenues=revenues.filter(r=>r.id!==id);persistRevenues();render();if(closeModal)document.getElementById('revenueModal').classList.remove('open');toast('Lançamento excluído');return true}
+function stageGroup(l,group){if(group==='quotes')return ['Orçamento enviado','Orçamento a enviar','Aguardando retorno'].includes(l.stage);return group==='all'||l.stage===group}
+function statusSelect(l){return `<div class="stage"><select data-id="${esc(l.id)}" data-stage="${esc(l.stage)}" aria-label="Etapa de ${esc(l.company)}">${stages.map(s=>`<option ${s===l.stage?'selected':''}>${esc(s)}</option>`).join('')}</select></div>`}
+function processRevenueId(leadId){return`process-${leadId}`}
+function processRevenueField(l){if(l.stage!=='Fechado')return'<span class="no-revenue">—</span>';const item=revenues.find(r=>r.id===processRevenueId(l.id));return`<div class="process-revenue"><div class="process-amount"><span>R$</span><input type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0,00" value="${item?(item.amount/100).toFixed(2):''}" data-process-revenue="${esc(l.id)}" aria-label="Receita gerada por ${esc(l.company)}"></div><button type="button" data-save-process-revenue="${esc(l.id)}">${item?'Atualizar':'Adicionar'}</button></div>`}
+function renderLeadRow(l){return`<tr><td><div class="company"><span class="avatar">${esc(initials(l.company))}</span><span><span class="co-name">${esc(l.company)}</span><span class="co-sub">${esc(l.category||'Lead comercial')}${l.estimate?' · '+esc(l.estimate):''}</span></span></div></td><td class="revenue-cell">${processRevenueField(l)}</td><td class="location">${esc(l.city||'—')}</td><td>${statusSelect(l)}</td><td class="date">${esc(l.lastActivity||l.date||'—')}</td><td class="note-cell"><button class="${l.note?'':'empty'}" data-edit="${esc(l.id)}">${l.note?'✎ Ver nota':'＋ Adicionar nota'}</button></td><td><div class="actions">${/^https:\/\/wa\.me\//.test(l.whatsapp)?`<a class="iconbtn" href="${esc(l.whatsapp)}" target="_blank" rel="noopener" title="Abrir WhatsApp" aria-label="Abrir WhatsApp">◉</a>`:''}<button class="iconbtn" data-edit="${esc(l.id)}" title="Editar lead" aria-label="Editar ${esc(l.company)}">✎</button></div></td></tr>`}
+function render(){
+ const counts={all:leads.length,prospect:leads.filter(x=>x.stage==='Prospectado').length,quotes:leads.filter(x=>['Orçamento enviado','Orçamento a enviar','Aguardando retorno'].includes(x.stage)).length,waiting:leads.filter(x=>x.stage==='Aguardando retorno').length,closed:leads.filter(x=>x.stage==='Fechado').length};
+ document.getElementById('stats').innerHTML=[['Leads na carteira',counts.all,'▦'],['Prospectados',counts.prospect,'◎'],['Orçamentos em andamento',counts.quotes,'↗'],['Negócios fechados',counts.closed,'✓']].map(a=>`<article class="stat"><div class="stathead">${a[0]}<span class="staticon">${a[2]}</span></div><strong>${a[1]}<small>${a[0]==='Leads na carteira'?'contatos':''}</small></strong></article>`).join('');
+ document.getElementById('count-all').textContent=counts.all;document.getElementById('count-prospect').textContent=counts.prospect;document.getElementById('count-quotes').textContent=counts.quotes;document.getElementById('count-waiting').textContent=counts.waiting;document.getElementById('count-closed').textContent=counts.closed;
+ const q=query.toLocaleLowerCase('pt-BR');let list=leads.filter(x=>stageGroup(x,activeTab)&&(filter==='all'||x.stage===filter)&&(!q||`${x.company} ${x.category} ${x.city} ${x.phone}`.toLocaleLowerCase('pt-BR').includes(q)));list.sort((a,b)=>a.company.localeCompare(b.company,'pt-BR'));
+ rows.innerHTML=list.length?list.map(renderLeadRow).join(''):'<tr><td colspan="7"><div class="empty-state">Nenhum lead encontrado.<br><button class="btn" data-clear>Limpar filtros</button></div></td></tr>';
+ document.getElementById('resultCount').textContent=`${list.length} ${list.length===1?'lead':'leads'}`;
+ document.querySelectorAll('.stage select').forEach(el=>el.addEventListener('change',async e=>{const l=leads.find(x=>x.id===e.target.dataset.id);if(!l)return;l.stage=e.target.value;l.lastActivity=new Date().toLocaleDateString('pt-BR');await saveLead(l)}));
+ document.querySelectorAll('[data-save-process-revenue]').forEach(btn=>btn.onclick=()=>saveProcessRevenue(btn.dataset.saveProcessRevenue));document.querySelectorAll('[data-process-revenue]').forEach(input=>input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveProcessRevenue(input.dataset.processRevenue)}}));
+ document.querySelectorAll('[data-edit]').forEach(el=>el.addEventListener('click',()=>openLead(el.dataset.edit)));document.querySelector('[data-clear]')?.addEventListener('click',()=>{query='';filter='all';activeTab='all';document.getElementById('search').value='';document.getElementById('stageFilter').value='all';setActive('all');render()});renderFinance();
+}
+function toast(s){const el=document.getElementById('toast');el.textContent=s;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2600)}
+function setCloudStatus(text,mode=''){const el=document.getElementById('cloudStatus');el.textContent=`● ${text}`;el.className=`cloud-status ${mode}`;const hint=document.getElementById('storageHint');if(hint)hint.textContent=mode==='online'?'Sincronização ativa nos seus notebooks.':'Seus dados ficam salvos neste navegador.'}
+function setActive(view){activeTab=view;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===view));document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.view===view))}
+function openLead(id){const l=leads.find(x=>x.id===id);document.getElementById('leadForm').reset();document.getElementById('leadId').value=l?.id||'';document.getElementById('modalTitle').textContent=l?'Editar lead':'Novo lead';document.getElementById('company').value=l?.company||'';document.getElementById('category').value=l?.category||'';document.getElementById('city').value=l?.city||'';document.getElementById('phone').value=l?.phone||'';document.getElementById('stage').value=l?.stage||'Prospectado';document.getElementById('notes').value=l?.note||'';document.getElementById('deleteBtn').classList.toggle('hidden',!l);modal.classList.add('open');document.getElementById('company').focus()}
+function toRemote(l){return{id:l.id,company:l.company,category:l.category,city:l.city,phone:l.phone,whatsapp:l.whatsapp,stage:l.stage,note:l.note,date:l.date,estimate:l.estimate,lastActivity:l.lastActivity}}
+function fromDb(l){return{id:String(l.id),company:l.company||'',category:l.category||'',city:l.city||'',phone:l.phone||'',whatsapp:l.whatsapp||'',stage:stages.includes(l.stage)?l.stage:'Prospectado',note:l.note||'',date:l.lead_date||'',estimate:l.estimate||'',lastActivity:l.last_activity||''}}
+async function saveLead(l){leads=leads.map(x=>x.id===l.id?l:x);persistLocal();render();if(client&&accessCode){try{await queueCloudWrite('crm_save_lead',{p_lead:toRemote(l)})}catch{setCloudStatus('Falha ao sincronizar','error');toast('Salvo neste aparelho, mas não sincronizou.');return}setCloudStatus('Sincronizado nos notebooks','online')}else toast('Salvo neste dispositivo')}
+async function removeLead(id){if(client&&accessCode){const{error}=await client.rpc('crm_delete_lead',{p_access_code:accessCode,p_lead_id:id});if(error){setCloudStatus('Falha ao sincronizar','error');toast('Não foi possível excluir na nuvem.');return}}leads=leads.filter(x=>x.id!==id);persistLocal();render();toast('Lead excluído')}
+async function applyCloudSnapshot(data,{seedLocal=true}={}){const remoteRows=Array.isArray(data)?data:[],remoteLeadRows=remoteRows.filter(row=>!isRemoteRevenue(row)),remoteRevenueRows=remoteRows.filter(isRemoteRevenue);if(remoteLeadRows.length){leads=remoteLeadRows.map(fromDb);persistLocal()}else if(seedLocal&&leads.length){for(const lead of leads){const{error}=await client.rpc('crm_save_lead',{p_access_code:accessCode,p_lead:toRemote(lead)});if(error)throw error}}else{leads=[];persistLocal()}const remoteRevenues=remoteRevenueRows.map(revenueFromRemote).filter(Boolean);if(remoteRevenues.length){revenues=remoteRevenues;persistRevenues()}else if(seedLocal&&revenues.length){for(const item of revenues)await saveRevenueRemote(item)}else{revenues=[];persistRevenues()}render()}
+async function loadCloud({quiet=false}={}){
+ if(!client||!accessCode||cloudLoading)return;
+ if(quiet&&document.activeElement?.matches('input,select,textarea'))return;
+ cloudLoading=true;
+ const connection=client,code=accessCode;
+ try{
+  await flushCloudWrites();
+  const version=cloudWriteVersion;
+  const {data,error}=await connection.rpc('crm_list_leads',{p_access_code:code});
+  if(error)throw error;
+  if(client!==connection||accessCode!==code||version!==cloudWriteVersion||pendingCloudWrites.length)return;
+  if(quiet&&document.activeElement?.matches('input,select,textarea'))return;
+  await applyCloudSnapshot(data,{seedLocal:cloudFirstRead});
+  cloudFirstRead=false;
+  cloudConnected=true;
+  setCloudStatus('Sincronizado nos notebooks','online');
+ }catch{
+  if(client!==connection||accessCode!==code)return;
+  cloudConnected=false;
+  setCloudStatus(pendingCloudWrites.length?'Alterações aguardando envio':'Nuvem indisponível · tentando novamente','error');
+  if(!quiet)toast('A conexão falhou. O CRM tentará novamente automaticamente.');
+ }finally{cloudLoading=false}
+}
+function startCloudPolling(){if(cloudPollTimer)clearInterval(cloudPollTimer);cloudPollTimer=setInterval(()=>loadCloud({seedLocal:false,quiet:true}),10000)}
+function setupClient(url,key){if(!window.supabase?.createClient)throw new Error('Biblioteca Supabase indisponível. Conecte à internet e recarregue.');client=window.supabase.createClient(url,key)}
+document.getElementById('stage').innerHTML=stages.map(s=>`<option>${esc(s)}</option>`).join('');document.getElementById('stageFilter').innerHTML='<option value="all">Todas as etapas</option>'+stages.map(s=>`<option>${esc(s)}</option>`).join('');
+document.getElementById('today').textContent=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'numeric',month:'long'}).format(new Date());
+document.getElementById('addBtn').onclick=()=>openLead();document.getElementById('closeModal').onclick=document.getElementById('cancelBtn').onclick=()=>modal.classList.remove('open');modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){modal.classList.remove('open');cloudModal.classList.remove('open');document.getElementById('revenueModal').classList.remove('open')}});
+document.getElementById('leadForm').addEventListener('submit',async e=>{e.preventDefault();const id=document.getElementById('leadId').value,phone=document.getElementById('phone').value.trim(),old=leads.find(x=>x.id===id),digits=phone.replace(/\D/g,''),waDigits=digits.startsWith('55')?digits:`55${digits}`,newLead={id:id||uuid(),company:document.getElementById('company').value.trim(),category:document.getElementById('category').value.trim(),city:document.getElementById('city').value.trim(),phone,whatsapp:digits.length>=10?`https://wa.me/${waDigits}`:'',stage:document.getElementById('stage').value,note:document.getElementById('notes').value.trim(),date:old?.date||new Date().toLocaleDateString('pt-BR'),estimate:old?.estimate||'',lastActivity:new Date().toLocaleDateString('pt-BR')};if(old)leads=leads.map(x=>x.id===id?newLead:x);else leads.unshift(newLead);modal.classList.remove('open');await saveLead(newLead)});
+document.getElementById('addRevenueBtn').onclick=()=>openRevenueModal();document.getElementById('revenueClose').onclick=document.getElementById('cancelRevenueBtn').onclick=()=>document.getElementById('revenueModal').classList.remove('open');document.getElementById('revenueModal').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open')});document.querySelectorAll('[data-revenue-period]').forEach(btn=>btn.onclick=()=>{revenuePeriod=btn.dataset.revenuePeriod;renderFinance()});
+document.getElementById('revenueForm').addEventListener('submit',async e=>{e.preventDefault();const id=document.getElementById('revenueId').value,rawAmount=document.getElementById('revenueAmount').value.replace(',','.'),item=normalizeRevenue({id:id||uuid(),description:document.getElementById('revenueDescription').value,amount:Math.round(Number(rawAmount)*100),date:document.getElementById('revenueDate').value,leadId:document.getElementById('revenueLead').value});if(!item){toast('Informe descrição, valor maior que zero e data válida.');return}const previous=revenues.find(r=>r.id===id);if(previous)revenues=revenues.map(r=>r.id===id?item:r);else revenues.unshift(item);persistRevenues();render();document.getElementById('revenueModal').classList.remove('open');if(client&&accessCode){try{await saveRevenueRemote(item);setCloudStatus('Sincronizado nos notebooks','online');toast('Receita salva e sincronizada')}catch(err){setCloudStatus('Falha ao sincronizar','error');toast('Receita salva neste aparelho; a nuvem falhou. Tente conectar novamente.')}}else toast('Receita salva neste aparelho')});
+document.getElementById('deleteRevenueBtn').onclick=()=>{const id=document.getElementById('revenueId').value;if(id)deleteRevenue(id,true)};
+document.getElementById('deleteBtn').onclick=()=>{const id=document.getElementById('leadId').value;if(id&&confirm('Excluir este lead? Esta ação não pode ser desfeita.')){modal.classList.remove('open');removeLead(id)}};
+document.getElementById('search').addEventListener('input',e=>{query=e.target.value;render()});document.getElementById('stageFilter').addEventListener('change',e=>{filter=e.target.value;setActive('all');render()});document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{filter='all';document.getElementById('stageFilter').value='all';setActive(b.dataset.tab);render()});document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{filter='all';document.getElementById('stageFilter').value='all';setActive(b.dataset.view);render()});
+document.getElementById('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify({version:2,leads,revenues},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='oficina-crm-backup.json';a.click();URL.revokeObjectURL(url);toast('Backup exportado')};
+document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();document.getElementById('importFile').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{const parsed=JSON.parse(await f.text()),rawLeads=Array.isArray(parsed)?parsed:parsed?.leads;if(!Array.isArray(rawLeads))throw new Error('O arquivo não contém uma lista de leads.');const incoming=rawLeads.filter(x=>x&&x.company).map((x,i)=>({id:String(x.id||uuid()+i),company:String(x.company),category:String(x.category||''),city:String(x.city||''),phone:String(x.phone||''),whatsapp:/^https:\/\/wa\.me\//.test(x.whatsapp||'')?x.whatsapp:'',stage:stages.includes(x.stage)?x.stage:'Prospectado',note:String(x.note||''),date:String(x.date||''),estimate:String(x.estimate||''),lastActivity:String(x.lastActivity||'')})),incomingRevenue=Array.isArray(parsed?.revenues)?parsed.revenues.map(normalizeRevenue).filter(Boolean):[];if(!incoming.length&&!incomingRevenue.length)throw new Error('Não encontrei leads ou receitas válidas nesse arquivo.');const leadMap=new Map(leads.map(x=>[x.id,x]));incoming.forEach(x=>leadMap.set(x.id,x));leads=[...leadMap.values()];const revenueMap=new Map(revenues.map(x=>[x.id,x]));incomingRevenue.forEach(x=>revenueMap.set(x.id,x));revenues=[...revenueMap.values()];persistLocal();persistRevenues();render();if(client&&accessCode){for(const item of incoming){const{error}=await client.rpc('crm_save_lead',{p_access_code:accessCode,p_lead:toRemote(item)});if(error)throw error}for(const item of incomingRevenue)await saveRevenueRemote(item)}toast(`${incoming.length} leads e ${incomingRevenue.length} receitas restaurados`)}catch(err){toast(err.message||'Não consegui ler esse backup')}finally{e.target.value=''}});
+function openCloudModal(){const connected=cloudConnected;document.getElementById('cloudTitle').textContent=connected?'Código conectado':'Sincronização entre notebooks';document.getElementById('cloudDescription').textContent=connected?'O código está salvo neste navegador. Não precisa digitá-lo novamente aqui.':'Digite o mesmo código compartilhado nos dois notebooks. Ele será lembrado neste navegador.';document.getElementById('cloudLoginFields').classList.toggle('hidden',connected);document.getElementById('cloudConnectedInfo').classList.toggle('hidden',!connected);document.getElementById('cloudConnectedInfo').innerHTML=connected?'<strong>✓ Sincronização ativa</strong><span>Seus leads são atualizados entre notebooks automaticamente.</span>':'';document.getElementById('cloudConnect').classList.toggle('hidden',connected);document.getElementById('cloudDisconnect').classList.toggle('hidden',!connected);document.getElementById('accessCode').value='';cloudModal.classList.add('open')}
+document.getElementById('cloudBtn').onclick=openCloudModal;document.getElementById('cloudClose').onclick=()=>cloudModal.classList.remove('open');cloudModal.addEventListener('click',e=>{if(e.target===cloudModal)cloudModal.classList.remove('open')});
+document.getElementById('cloudForm').addEventListener('submit',async e=>{
+ e.preventDefault();const{url,key}=getCloudConfig(),code=document.getElementById('accessCode').value.trim();if(!url||!key||code.length<20){toast('Informe o código compartilhado.');return}
+ try{setupClient(url,key);accessCode=code;const{data,error}=await client.rpc('crm_list_leads',{p_access_code:code});if(error)throw error;const hadPending=pendingCloudWrites.length>0;await flushCloudWrites();const snapshot=hadPending?await client.rpc('crm_list_leads',{p_access_code:code}):{data};if(snapshot.error)throw snapshot.error;localStorage.setItem(configKey,JSON.stringify({url,key}));localStorage.setItem(codeKey,code);localStorage.removeItem(disabledKey);await applyCloudSnapshot(snapshot.data,{seedLocal:true});cloudFirstRead=false;cloudConnected=true;cloudModal.classList.remove('open');document.getElementById('accessCode').value='';setCloudStatus('Sincronizado nos notebooks','online');startCloudPolling()}
+ catch(err){accessCode='';cloudConnected=false;setCloudStatus('Código não conectado','error');const message=String(err?.message||err||'');let notice='Falha ao falar com o Supabase.';if(/Código de acesso incorreto/i.test(message))notice='O código não confere com o registrado no Supabase.';else if(/PGRST202|Could not find the function|function .* does not exist/i.test(message))notice='A migração ainda não foi concluída ou o Supabase está atualizando. Rode o SQL novamente e tente em alguns segundos.';else if(message)notice='Falha Supabase: '+message.slice(0,160);toast(notice)}
+});
+document.getElementById('cloudDisconnect').onclick=()=>{if(cloudPollTimer)clearInterval(cloudPollTimer);cloudPollTimer=null;client=null;accessCode='';cloudConnected=false;localStorage.removeItem(codeKey);localStorage.removeItem(configKey);localStorage.setItem(disabledKey,'1');cloudModal.classList.remove('open');setCloudStatus('Só neste dispositivo');toast('Desconectado; leads locais preservados')};
+window.addEventListener('storage',e=>{if(e.key===storageKey&&e.newValue){try{leads=JSON.parse(e.newValue)||[];render()}catch{}}});
+render();
+window.addEventListener('online',()=>loadCloud({quiet:true}));
+window.addEventListener('focus',()=>loadCloud({quiet:true}));
+try{const c=getCloudConfig(),code=localStorage.getItem(codeKey);if(localStorage.getItem(disabledKey)!=='1'&&c.url&&c.key&&code){setupClient(c.url,c.key);accessCode=code;startCloudPolling();loadCloud()}}catch{setCloudStatus('Só neste dispositivo')}
+</script>
 </body>
 </html>
